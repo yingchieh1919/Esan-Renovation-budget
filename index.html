@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一森室內設計 ESAN | 尊爵裝潢預算估算器</title>
+    <title>一森室內設計 ESAN | 理想生活風格與空間提案</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
 
         .calculator-card {
             background: var(--card-bg);
-            padding: 36px 32px;
+            padding: 40px 32px;
             border-radius: 16px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
             max-width: 480px;
@@ -44,22 +44,21 @@
             position: relative;
         }
 
-        /* 品牌 Logo 區域 */
+        /* 品牌 Header */
         .brand-header {
             text-align: center;
             margin-bottom: 20px;
         }
 
-        /* 直接載入您上傳的 Logo 圖片 */
         .brand-logo-img {
-            max-width: 140px; /* 控制 Logo 寬度，若太小可改為 160px 或 180px */
+            max-width: 130px;
             height: auto;
             margin: 0 auto;
             display: block;
         }
 
         .page-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--text-dark);
             text-align: center;
             margin: 18px 0 6px 0;
@@ -68,13 +67,77 @@
         }
 
         .page-subtitle {
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             text-align: center;
             margin-bottom: 24px;
+            line-height: 1.6;
         }
 
-        /* 表單區域 */
+        /* 進度條與步驟 */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .step-dot.active {
+            background-color: var(--gold-primary);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* 測驗問題樣式 */
+        .quiz-section {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .question-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: block;
+        }
+
+        .option-btn:hover {
+            border-color: var(--gold-primary);
+            background-color: #fcfaf7;
+            transform: translateX(4px);
+        }
+
+        /* 表單區域 (步驟 4) */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -85,7 +148,6 @@
             font-weight: 600;
             color: var(--text-dark);
             font-size: 0.88rem;
-            letter-spacing: 0.02em;
         }
 
         input[type="number"], select {
@@ -94,21 +156,14 @@
             border: 1px solid var(--border-color);
             border-radius: 6px;
             box-sizing: border-box;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: var(--text-dark);
             background-color: #ffffff;
             transition: all 0.25s ease;
             font-family: inherit;
         }
 
-        input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.25);
-        }
-
-        /* 按鈕樣式 */
-        button {
+        .submit-btn {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
@@ -120,23 +175,30 @@
             cursor: pointer;
             letter-spacing: 0.1em;
             transition: opacity 0.2s, transform 0.1s;
-            margin-top: 6px;
+            margin-top: 8px;
             box-shadow: 0 4px 12px rgba(168, 137, 94, 0.25);
             font-family: inherit;
         }
 
-        button:hover {
-            opacity: 0.92;
-        }
+        .submit-btn:hover { opacity: 0.92; }
 
-        button:active {
-            transform: scale(0.99);
+        /* 風格分析結果卡片 */
+        .style-badge {
+            background-color: #f2efe9;
+            border-left: 3px solid var(--gold-primary);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 18px;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
         /* 結果展示區 */
         .result {
-            margin-top: 26px;
-            padding-top: 22px;
+            display: none;
+            margin-top: 24px;
+            padding-top: 20px;
             border-top: 1px solid var(--border-color);
             animation: fadeIn 0.4s ease-out;
         }
@@ -146,41 +208,41 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .result-title {
-            margin: 0;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
         .total-price {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             color: var(--gold-dark);
             font-weight: 700;
             margin: 6px 0 16px 0;
-            letter-spacing: 0.02em;
         }
 
         .detail-list {
             background: #f2efe9;
             border: 1px solid var(--border-color);
-            padding: 16px;
+            padding: 18px;
             border-radius: 8px;
             font-size: 0.85rem;
             color: var(--text-dark);
         }
 
-        .detail-list p {
-            margin: 0 0 8px 0;
-            font-weight: 600;
-            color: var(--text-dark);
+        .detail-list ul {
+            padding-left: 0;
+            list-style: none;
+            margin: 0;
+            line-height: 1.9;
         }
 
-        .detail-list ul {
+        .detail-list li {
+            position: relative;
             padding-left: 18px;
-            margin: 0;
-            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .detail-list li::before {
+            content: "•";
+            color: var(--gold-primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
         }
 
         .detail-list li span {
@@ -189,11 +251,10 @@
         }
 
         .note {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
-            margin-top: 16px;
-            margin-bottom: 0;
-            line-height: 1.5;
+            margin-top: 18px;
+            line-height: 1.6;
         }
 
         .contact-btn {
@@ -203,12 +264,12 @@
             border: 1px solid var(--gold-primary);
             color: var(--gold-dark);
             text-decoration: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-top: 16px;
-            transition: all 0.2s;
+            margin-top: 18px;
+            transition: all 0.25s;
         }
 
         .contact-btn:hover {
@@ -220,49 +281,130 @@
 <body>
 
     <div class="calculator-card">
+        <!-- 品牌 Logo -->
         <div class="brand-header">
             <img src="logo.png" alt="一森室內設計 ESAN INTERIOR DESIGN" class="brand-logo-img">
         </div>
 
-        <div class="page-title">尊爵裝潢預算估算器</div>
-        <p class="page-subtitle">為您專屬訂製的一森極致空間</p>
-        
-        <div class="form-group">
-            <label for="ping">室內坪數（不含陽台與公設）：</label>
-            <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
+        <div class="page-title" id="mainTitle">理想生活風格診斷</div>
+        <p class="page-subtitle" id="mainSubtitle">只需 30 秒，陪伴您探索對『家』的真實憧憬</p>
+
+        <!-- 步驟指示點 -->
+        <div class="step-indicator">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
+            <div class="step-dot" id="dot4"></div>
         </div>
 
-        <div class="form-group">
-            <label for="houseType">屋齡與工程類型：</label>
-            <select id="houseType">
-                <option value="150000">一森尊爵新成屋（約 12~18 萬/坪）</option>
-                <option value="210000">一森極致老屋翻新（約 18~25 萬/坪）</option>
-                <option value="80000">微裝修 / 軟裝設計（約 6~10 萬/坪）</option>
-            </select>
+        <!-- 測驗 Q1 -->
+        <div class="quiz-section" id="q1">
+            <div class="question-title">Q1. 想像一個理想的週末早晨，您最期待身處什麼樣的氛圍？</div>
+            <button class="option-btn" onclick="nextQuestion(1, 'wabi')">☕ 陽光灑在溫潤木質與微水泥上，靜靜享用一杯手沖</button>
+            <button class="option-btn" onclick="nextQuestion(1, 'modern')">✨ 乾淨俐落的線條與明亮採光，開啟高效沉穩的一天</button>
+            <button class="option-btn" onclick="nextQuestion(1, 'luxury')">🛋️ 典雅大氣的石材與細緻燈光，享受如精品飯店般的包覆感</button>
         </div>
 
-        <button onclick="calculateBudget()">開始您的專屬預算試算</button>
+        <!-- 測驗 Q2 -->
+        <div class="quiz-section" id="q2" style="display: none;">
+            <div class="question-title">Q2. 當您回到家時，哪種感受最能讓您徹底放鬆？</div>
+            <button class="option-btn" onclick="nextQuestion(2, 'wabi')">🌿 自然大地色系，沒有過多雜飾的純粹與平靜</button>
+            <button class="option-btn" onclick="nextQuestion(2, 'modern')">📐 收納妥當、毫無雜物的寬敞視覺空間</button>
+            <button class="option-btn" onclick="nextQuestion(2, 'luxury')">🍷 個性化的燈光氛圍與精緻質感的觸覺體驗</button>
+        </div>
 
-        <div class="result" id="resultBox" style="display: none;">
-            <div class="result-title">預估總費用範圍</div>
+        <!-- 測驗 Q3 -->
+        <div class="quiz-section" id="q3" style="display: none;">
+            <div class="question-title">Q3. 在未來的空間裡，您最看重的生活核心是？</div>
+            <button class="option-btn" onclick="nextQuestion(3, 'wabi')">🍵 留白的心靈角落，能與家人自然互動的暖心場域</button>
+            <button class="option-btn" onclick="nextQuestion(3, 'modern')">💻 流暢的居家動線，兼具辦公與休閒的高機能設計</button>
+            <button class="option-btn" onclick="nextQuestion(3, 'luxury')">🥂 款待好友的中島餐廚，展現個人品味的生活展示台</button>
+        </div>
+
+        <!-- 步驟 4：風格分析與坪數試算 -->
+        <div class="form-section" id="formSection">
+            <div class="style-badge" id="styleBadge">
+                <!-- JavaScript 動態帶入風格名稱與描述 -->
+            </div>
+
+            <div class="form-group">
+                <label for="ping">期待規劃的空間坪數：</label>
+                <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
+            </div>
+
+            <div class="form-group">
+                <label for="houseType">空間現狀與工程型態：</label>
+                <select id="houseType">
+                    <option value="150000">新成屋客製｜打造簡約細緻的專屬風格</option>
+                    <option value="210000">中古老屋煥新｜重塑安全與通透的空間動線</option>
+                    <option value="80000">輕裝修微調整｜品味傢俱與軟裝質感提案</option>
+                </select>
+            </div>
+
+            <button class="submit-btn" onclick="calculateBudget()">檢視一森生活提案試算</button>
+        </div>
+
+        <!-- 結果展示區 -->
+        <div class="result" id="resultBox">
+            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">整體空間規劃參考範疇</div>
             <div class="total-price" id="totalPrice">$0</div>
             
             <div class="detail-list">
-                <p>建議預算分配比例：</p>
+                <p style="margin:0 0 10px 0; font-weight:600;">資源挹注的溫度分配：</p>
                 <ul>
-                    <li>一森林感基礎與木作：<span id="hardBuild">$0</span>（約 60%）</li>
-                    <li>頂級家電與傢俱：<span id="furniture">$0</span>（約 30%）</li>
-                    <li>極致軟裝與監工：<span id="decor">$0</span>（約 10%）</li>
+                    <li>奠定安心與質感的基礎硬體：<span id="hardBuild">$0</span></li>
+                    <li>陪伴日常的質感傢俱與家電：<span id="furniture">$0</span></li>
+                    <li>點綴生活儀式感的軟裝細節：<span id="decor">$0</span></li>
                 </ul>
             </div>
             
-            <p class="note">※ 備註：此結果為基礎估算，實際費用仍需依現場丈量結果、設計細節及指定建材為準。</p>
+            <p class="note">※ 一森叮嚀：每一個家的生活習慣皆是獨一無二的，這份提案是我們交流的起點，我們更期待聽您分享心中的理想生活。</p>
             
-            <a href="https://line.me" target="_blank" class="contact-btn">預約一森設計師現場丈量</a>
+            <a href="https://line.me" target="_blank" class="contact-btn">與一森聊聊您的生活憧憬</a>
         </div>
     </div>
 
     <script>
+        let scores = { wabi: 0, modern: 0, luxury: 0 };
+
+        function nextQuestion(currentQ, type) {
+            scores[type]++;
+            document.getElementById(`q${currentQ}`).style.display = 'none';
+
+            if (currentQ < 3) {
+                const nextQ = currentQ + 1;
+                document.getElementById(`q${nextQ}`).style.display = 'block';
+                document.getElementById(`dot${nextQ}`).classList.add('active');
+            } else {
+                // 進入試算表單頁
+                showFormSection();
+            }
+        }
+
+        function showFormSection() {
+            document.getElementById('dot4').classList.add('active');
+            document.getElementById('mainTitle').innerText = "您的專屬生活風格側寫";
+            document.getElementById('mainSubtitle').innerText = "結合您的品味偏好，為您試算空間規劃範疇";
+            document.getElementById('formSection').style.display = 'block';
+
+            // 計算分數最高者的風格
+            let topStyle = 'wabi';
+            if (scores.modern > scores.wabi && scores.modern >= scores.luxury) {
+                topStyle = 'modern';
+            } else if (scores.luxury > scores.wabi && scores.luxury > scores.modern) {
+                topStyle = 'luxury';
+            }
+
+            const badge = document.getElementById('styleBadge');
+            if (topStyle === 'wabi') {
+                badge.innerHTML = `<strong>✨ 偏好風格：自然溫潤 ✕ 日式侘寂 / 輕現代</strong><br>您追求心靈的寧靜與純粹，偏好木質、自然塗料與溫柔的光影，注重空間的溫度與包覆感。`;
+            } else if (topStyle === 'modern') {
+                badge.innerHTML = `<strong>✨ 偏好風格：極簡俐落 ✕ 現代機能</strong><br>您注重條理與空間效益，偏好俐落的幾何線條、通透採光與強大的收納機能，享受無負擔的生活空間。`;
+            } else {
+                badge.innerHTML = `<strong>✨ 偏好風格：尊爵質感 ✕ 輕奢飯店風</strong><br>您擁有敏銳的品味感官，偏好大理石、精緻金屬與層次豐富的氛圍燈光，追求如精品旅店般的生活儀式感。`;
+            }
+        }
+
         function calculateBudget() {
             const pingInput = document.getElementById('ping').value;
             const ping = parseFloat(pingInput);
