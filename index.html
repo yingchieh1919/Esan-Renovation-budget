@@ -16,6 +16,7 @@
             --text-dark: #1f2722;
             --text-muted: #5e6b63;
             --border-color: #e2ded7;
+            --line-green: #06c755;
         }
 
         body {
@@ -44,15 +45,13 @@
             position: relative;
         }
 
-        /* 品牌 Logo 區域 */
         .brand-header {
             text-align: center;
             margin-bottom: 20px;
         }
 
-        /* 直接載入您上傳的 Logo 圖片 */
         .brand-logo-img {
-            max-width: 140px; /* 控制 Logo 寬度，若太小可改為 160px 或 180px */
+            max-width: 140px;
             height: auto;
             margin: 0 auto;
             display: block;
@@ -74,7 +73,6 @@
             margin-bottom: 24px;
         }
 
-        /* 表單區域 */
         .form-group {
             margin-bottom: 20px;
         }
@@ -107,7 +105,6 @@
             box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.25);
         }
 
-        /* 按鈕樣式 */
         button {
             width: 100%;
             padding: 14px;
@@ -133,7 +130,6 @@
             transform: scale(0.99);
         }
 
-        /* 結果展示區 */
         .result {
             margin-top: 26px;
             padding-top: 22px;
@@ -196,30 +192,43 @@
             line-height: 1.5;
         }
 
-        .contact-btn {
-            display: block;
-            text-align: center;
-            background: transparent;
-            border: 1px solid var(--gold-primary);
-            color: var(--gold-dark);
+        /* LINE 按鈕獨立樣式 */
+        .line-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: var(--line-green);
+            color: #ffffff;
             text-decoration: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 6px;
-            font-size: 0.88rem;
+            font-size: 0.92rem;
             font-weight: 600;
-            margin-top: 16px;
-            transition: all 0.2s;
+            margin-top: 18px;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(6, 199, 85, 0.2);
         }
 
-        .contact-btn:hover {
-            background: var(--gold-primary);
-            color: #ffffff;
+        .line-btn:hover {
+            opacity: 0.9;
+        }
+
+        .line-btn:active {
+            transform: scale(0.99);
+        }
+
+        .line-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
     </style>
 </head>
 <body>
 
     <div class="calculator-card">
+        <!-- 品牌 Logo 區域 -->
         <div class="brand-header">
             <img src="logo.png" alt="一森室內設計 ESAN INTERIOR DESIGN" class="brand-logo-img">
         </div>
@@ -227,6 +236,7 @@
         <div class="page-title">尊爵裝潢預算估算器</div>
         <p class="page-subtitle">為您專屬訂製的一森極致空間</p>
         
+        <!-- 輸入表單 -->
         <div class="form-group">
             <label for="ping">室內坪數（不含陽台與公設）：</label>
             <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
@@ -235,14 +245,26 @@
         <div class="form-group">
             <label for="houseType">屋齡與工程類型：</label>
             <select id="houseType">
-                <option value="150000">一森尊爵新成屋（約 12~18 萬/坪）</option>
-                <option value="210000">一森極致老屋翻新（約 18~25 萬/坪）</option>
-                <option value="80000">微裝修 / 軟裝設計（約 6~10 萬/坪）</option>
+                <option value="new">一森尊爵新成屋（100 萬起跳）</option>
+                <option value="old">一森極致老屋翻新（200 萬起跳）</option>
+                <option value="soft">微裝修 / 軟裝設計（60 萬起跳）</option>
+            </select>
+        </div>
+
+        <!-- 風格選擇欄位 -->
+        <div class="form-group">
+            <label for="styleType">偏好設計風格：</label>
+            <select id="styleType">
+                <option value="1.0">現代極簡風 / 北歐風（標準造價）</option>
+                <option value="1.15">一森自然木質風 / 日式侘寂（+15%）</option>
+                <option value="1.3">輕奢飯店風 / 莫蘭迪美式（+30%）</option>
+                <option value="1.5">頂級尊爵奢華風 / 高級訂製（+50%）</option>
             </select>
         </div>
 
         <button onclick="calculateBudget()">開始您的專屬預算試算</button>
 
+        <!-- 結果展示區 -->
         <div class="result" id="resultBox" style="display: none;">
             <div class="result-title">預估總費用範圍</div>
             <div class="total-price" id="totalPrice">$0</div>
@@ -258,7 +280,13 @@
             
             <p class="note">※ 備註：此結果為基礎估算，實際費用仍需依現場丈量結果、設計細節及指定建材為準。</p>
             
-            <a href="https://line.me" target="_blank" class="contact-btn">預約一森設計師現場丈量</a>
+            <!-- 加 LINE 諮詢按鈕（請將 href 改為您的 LINE 官方帳號連結，例如 https://lin.ee/xxxxx） -->
+            <a href="https://line.me" target="_blank" class="line-btn">
+                <svg class="line-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 5.82 2 10.53c0 4.23 3.61 7.78 8.48 8.42.33.07.78.22.89.51.1.26.07.67.03.94l-.14.86c-.04.26-.2.1.03 1.18.23.23 1.25.75 2.06.32 2.74-1.61 7.65-4.5 7.65-11.23C22 5.82 17.52 2 12 2z"/>
+                </svg>
+                加 LINE 預約一森設計師現場丈量
+            </a>
         </div>
     </div>
 
@@ -266,14 +294,31 @@
         function calculateBudget() {
             const pingInput = document.getElementById('ping').value;
             const ping = parseFloat(pingInput);
-            const costPerPing = parseFloat(document.getElementById('houseType').value);
+            const houseType = document.getElementById('houseType').value;
+            const styleMultiplier = parseFloat(document.getElementById('styleType').value);
 
             if (!ping || ping <= 0) {
                 alert("請輸入正確的坪數！");
                 return;
             }
 
-            const totalEstimate = ping * costPerPing;
+            let baseCost = 0;
+            let costPerPing = 0;
+
+            if (houseType === 'new') {
+                baseCost = 1000000;
+                costPerPing = 60000;
+            } else if (houseType === 'old') {
+                baseCost = 2000000;
+                costPerPing = 90000;
+            } else if (houseType === 'soft') {
+                baseCost = 600000;
+                costPerPing = 30000;
+            }
+
+            const rawEstimate = baseCost + (ping * costPerPing);
+            const totalEstimate = Math.round(rawEstimate * styleMultiplier);
+            
             const hardBuild = Math.round(totalEstimate * 0.6);
             const furniture = Math.round(totalEstimate * 0.3);
             const decor = Math.round(totalEstimate * 0.1);
