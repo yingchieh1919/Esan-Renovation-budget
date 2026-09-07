@@ -49,7 +49,7 @@
             box-shadow: 
                 0 30px 80px rgba(0, 0, 0, 0.45),
                 0 0 0 1px rgba(197, 168, 128, 0.2);
-            max-width: 540px;
+            max-width: 560px;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -58,9 +58,7 @@
         .container::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 4px;
             background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
         }
@@ -117,15 +115,21 @@
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
-        input[type="number"], select {
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%;
-            padding: 14px 18px;
+            padding: 13px 16px;
             border: 1px solid var(--border-light);
-            border-radius: 12px;
-            font-size: 0.95rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
             color: var(--text-main);
             background-color: #ffffff;
             transition: all 0.3s ease;
@@ -133,7 +137,12 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
-        input[type="number"]:focus, select:focus {
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--gold-primary);
             box-shadow: 0 0 0 4px var(--gold-glow);
@@ -144,23 +153,20 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
         .style-card {
             border: 1px solid var(--border-light);
-            border-radius: 14px;
-            padding: 14px;
+            border-radius: 12px;
+            padding: 12px;
             background: #ffffff;
             cursor: pointer;
             transition: all 0.25s ease;
             position: relative;
         }
 
-        .style-card:hover {
-            border-color: var(--gold-primary);
-            transform: translateY(-2px);
-        }
+        .style-card:hover { border-color: var(--gold-primary); }
 
         .style-card.active {
             border-color: var(--gold-primary);
@@ -170,16 +176,15 @@
 
         .style-card-title {
             font-weight: 600;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--text-main);
             margin-bottom: 4px;
         }
 
         .style-card-desc {
-            font-size: 0.75rem;
+            font-size: 0.73rem;
             color: var(--text-sub);
-            line-height: 1.4;
-            font-weight: 300;
+            line-height: 1.3;
         }
 
         .style-card input[type="radio"] {
@@ -188,7 +193,6 @@
             pointer-events: none;
         }
 
-        /* 按鈕 */
         .submit-btn {
             width: 100%;
             padding: 16px;
@@ -205,81 +209,36 @@
             font-family: inherit;
         }
 
-        .submit-btn:hover {
-            opacity: 0.95;
-            transform: translateY(-1px);
-        }
+        .submit-btn:hover { opacity: 0.95; transform: translateY(-1px); }
 
-        /* 分析結論面板 */
+        /* 圖檔預覽區 */
         .result-panel {
-            margin-top: 34px;
-            padding-top: 28px;
+            margin-top: 30px;
+            padding-top: 24px;
             border-top: 1px dashed var(--border-light);
             display: none;
-            animation: slideUp 0.5s ease-out forwards;
+            text-align: center;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-badge {
-            display: inline-block;
-            background-color: var(--gold-light);
-            color: var(--gold-dark);
-            font-size: 0.78rem;
-            padding: 4px 12px;
-            border-radius: 20px;
+        .preview-title {
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .proposal-title {
-            font-size: 1.15rem;
-            font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 16px;
-            line-height: 1.4;
+            margin-bottom: 6px;
         }
 
-        .proposal-card {
-            background: #ffffff;
+        .preview-desc {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-bottom: 18px;
+        }
+
+        #generatedImage {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             border: 1px solid var(--border-light);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
-        }
-
-        .proposal-card h4 {
-            margin: 0 0 10px 0;
-            font-size: 0.9rem;
-            color: var(--gold-dark);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .proposal-card ul {
-            margin: 0;
-            padding-left: 18px;
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            line-height: 1.8;
-        }
-
-        .proposal-card li span {
-            color: var(--text-main);
-            font-weight: 600;
-        }
-
-        .note {
-            font-size: 0.76rem;
-            color: var(--text-sub);
-            margin-top: 18px;
-            line-height: 1.6;
-            font-weight: 300;
+            margin-bottom: 20px;
         }
 
         .line-btn {
@@ -292,50 +251,56 @@
             text-decoration: none;
             padding: 15px;
             border-radius: 12px;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-top: 22px;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.2);
+            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.22);
             letter-spacing: 0.05em;
         }
 
-        .line-btn:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-        }
+        .line-btn:hover { opacity: 0.92; transform: translateY(-1px); }
 
-        .line-icon {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
+        .line-icon { width: 20px; height: 20px; fill: currentColor; }
+
+        /* 隱藏畫布 Canvas */
+        #cardCanvas { display: none; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Logo -->
         <div class="brand-header">
             <img src="logo.PNG" alt="一森室內設計" class="brand-logo-img">
         </div>
 
-        <div class="page-title">理想生活規劃檢測</div>
-        <p class="page-subtitle">輸入預算與嚮往風格，為您試算出最合適的資源分配落點</p>
+        <div class="page-title">理想生活規劃諮詢</div>
+        <p class="page-subtitle">請填寫您的基本資訊與預算，系統將自動生成專屬諮詢圖檔</p>
         
-        <!-- 1. 預算輸入 -->
-        <div class="form-group">
-            <div class="section-label">預算規劃金額（萬元）</div>
-            <input type="number" id="budgetInput" placeholder="請輸入預算（例如：100）" min="30" value="100">
+        <!-- 1. 客戶個人資訊 -->
+        <div class="section-label">基本聯絡資訊</div>
+        <div class="form-group form-row">
+            <input type="text" id="custName" placeholder="您的姓名 / 稱呼" required>
+            <input type="text" id="custPhone" placeholder="聯絡電話" required>
         </div>
 
-        <!-- 2. 空間現況 -->
-        <div class="form-group">
-            <div class="section-label">房屋現況與類型</div>
+        <div class="form-group form-row">
+            <input type="text" id="custProject" placeholder="建案名稱或地址">
+            <select id="custTime">
+                <option value="隨時皆可">方便聯絡時間：隨時皆可</option>
+                <option value="平日白天 (09:00 - 18:00)">平日白天 (09:00 - 18:00)</option>
+                <option value="平日晚上 (18:00 - 21:00)">平日晚上 (18:00 - 21:00)</option>
+                <option value="假日/週末">假日 / 週末</option>
+            </select>
+        </div>
+
+        <!-- 2. 預算與屋況 -->
+        <div class="section-label">預算與房屋現況</div>
+        <div class="form-group form-row">
+            <input type="number" id="budgetInput" placeholder="預算金額（萬元）" min="30" value="100">
             <select id="houseType">
-                <option value="new">新成屋（防護/系統櫃/家具需求為主）</option>
-                <option value="old">老屋翻新（需要基礎工程與水電拆除）</option>
-                <option value="soft">微裝修 / 局部軟裝煥新</option>
+                <option value="新成屋">新成屋全域規劃</option>
+                <option value="老屋翻新">老屋翻新重構</option>
+                <option value="微裝修/軟裝">微裝修 / 局部軟裝</option>
             </select>
         </div>
 
@@ -343,65 +308,56 @@
         <div class="section-label">嚮往的生活風格</div>
         <div class="style-grid">
             <label class="style-card active" onclick="selectStyle(this)">
-                <input type="radio" name="styleChoice" value="minimal" checked>
+                <input type="radio" name="styleChoice" value="簡約留白" checked>
                 <div class="style-card-title">簡約留白</div>
-                <div class="style-card-desc">採光優良，極簡俐落的木質與塗料收納</div>
+                <div class="style-card-desc">極簡線條，流暢採光與呼吸感</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
-                <input type="radio" name="styleChoice" value="wabi">
+                <input type="radio" name="styleChoice" value="自然寂靜">
                 <div class="style-card-title">自然寂靜</div>
-                <div class="style-card-desc">手感塗料與多層次木紋，烘託安穩氛圍</div>
+                <div class="style-card-desc">手感塗料與溫潤木質氛圍</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
-                <input type="radio" name="styleChoice" value="luxury">
+                <input type="radio" name="styleChoice" value="飯店級輕奢">
                 <div class="style-card-title">飯店級輕奢</div>
-                <div class="style-card-desc">金屬細節、石材壁板與精緻氛圍燈光</div>
+                <div class="style-card-desc">金屬細節、石材壁板與精緻光影</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
-                <input type="radio" name="styleChoice" value="custom">
+                <input type="radio" name="styleChoice" value="尊爵訂製邸宅">
                 <div class="style-card-title">尊爵訂製邸宅</div>
-                <div class="style-card-desc">獨特客製工藝與頂級建材，彰顯非凡品味</div>
+                <div class="style-card-desc">特殊工藝與頂級建材客製化</div>
             </label>
         </div>
 
-        <button class="submit-btn" onclick="analyzeProposal()">生成專屬空間配置建議</button>
+        <!-- 4. 簡述需求 -->
+        <div class="form-group">
+            <div class="section-label">簡述裝修需求或重點</div>
+            <textarea id="custNeeds" placeholder="例如：希望增加主臥收納、客廳要能擺放65吋電視、浴室乾濕分離..."></textarea>
+        </div>
 
-        <!-- 分析結論面板 -->
+        <button class="submit-btn" onclick="generateImageCard()">一鍵生成專屬諮詢卡圖檔</button>
+
+        <!-- 圖檔生成結論與預覽 -->
         <div class="result-panel" id="resultBox">
-            <span class="result-badge" id="resBadge">預算分析結論</span>
-            <div class="proposal-title" id="resTitle">100 萬預算下的最佳規劃落點</div>
+            <div class="preview-title">您的專屬需求諮詢卡已生成</div>
+            <p class="preview-desc">請長按或點擊儲存上方圖檔，並將圖檔傳送至 LINE，專屬設計師將主動與您聯繫！</p>
             
-            <div class="proposal-card">
-                <h4>✦ 核心空間資源落點</h4>
-                <ul id="spaceFocusList">
-                    <!-- 動態帶入 -->
-                </ul>
-            </div>
+            <img id="generatedImage" src="" alt="一森專屬諮詢卡">
 
-            <div class="proposal-card">
-                <h4>✦ 系統櫃與收納佈局建議</h4>
-                <p style="font-size: 0.85rem; color: var(--text-sub); margin: 0 0 8px 0;" id="cabinetAdvice"></p>
-            </div>
-
-            <div class="proposal-card">
-                <h4>✦ 衛浴與浴室關鍵指標</h4>
-                <p style="font-size: 0.85rem; color: var(--text-sub); margin: 0;" id="bathroomAdvice"></p>
-            </div>
-            
-            <p class="note">※ 溫馨提醒：此分析為初步規劃建議，一森設計團隊將根據現場實際丈量結果與您的需求重點進行客製化微調。</p>
-            
-            <!-- LINE 官方帳號 -->
             <a href="https://lin.ee/rMxsLCa" target="_blank" class="line-btn">
                 <svg class="line-icon" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 5.82 2 10.53c0 4.23 3.61 7.78 8.48 8.42.33.07.78.22.89.51.1.26.07.67.03.94l-.14.86c-.04.26-.2.1.03 1.18.23.23 1.25.75 2.06.32 2.74-1.61 7.65-4.5 7.65-11.23C22 5.82 17.52 2 12 2z"/>
                 </svg>
-                與一森設計師預約現場諮詢
+                傳送圖檔至一森官方 LINE
             </a>
         </div>
     </div>
+
+    <!-- 用於繪製圖檔的隱藏 Canvas -->
+    <canvas id="cardCanvas" width="800" height="1050"></canvas>
 
     <script>
         function selectStyle(element) {
@@ -410,71 +366,119 @@
             element.querySelector('input[type="radio"]').checked = true;
         }
 
-        function analyzeProposal() {
-            const budgetInWan = parseFloat(document.getElementById('budgetInput').value);
+        function generateImageCard() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const project = document.getElementById('custProject').value.trim() || "未提供";
+            const time = document.getElementById('custTime').value;
+            const budget = document.getElementById('budgetInput').value;
             const houseType = document.getElementById('houseType').value;
-            const selectedStyle = document.querySelector('input[name="styleChoice"]:checked').value;
+            const style = document.querySelector('input[name="styleChoice"]:checked').value;
+            const needs = document.getElementById('custNeeds').value.trim() || "無特別備註";
 
-            if (!budgetInWan || budgetInWan <= 0) {
-                alert("請輸入有效的預算金額！");
+            if (!name || !phone) {
+                alert("請填寫您的「姓名」與「聯絡電話」，以便設計師協助聯繫！");
                 return;
             }
 
-            const totalBudget = budgetInWan * 10000;
+            // 開始繪製 Canvas
+            const canvas = document.getElementById('cardCanvas');
+            const ctx = canvas.getContext('2d');
 
-            // 風格名稱
-            let styleName = "簡約留白";
-            if (selectedStyle === 'wabi') styleName = "自然寂靜";
-            if (selectedStyle === 'luxury') styleName = "飯店級輕奢";
-            if (selectedStyle === 'custom') styleName = "尊爵訂製邸宅";
+            // 1. 背景底色
+            ctx.fillStyle = "#faf8f5";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 1. 空間核心落點邏輯
-            let spaceListHTML = "";
-            let cabinetText = "";
-            let bathText = "";
+            // 2. 奢華外框與邊角
+            ctx.strokeStyle = "#c5a880";
+            ctx.lineWidth = 6;
+            ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
 
-            if (budgetInWan < 80) {
-                // 60-80萬（輕量/軟裝/局部）
-                spaceListHTML = `
-                    <li><b>客廳門面</b>：公領域系統電視櫃、鞋櫃與重點質感天花板。</li>
-                    <li><b>主臥空間</b>：基礎衣櫃收納與牆面氛圍漆色。</li>
-                    <li><b>次臥/其他</b>：建議保持留白，採用現成家具軟裝調整。</li>
-                `;
-                cabinetText = "預算建議優先投資於<b>「客廳公領域系統櫃」</b>（玄關鞋櫃 + 電視展示櫃），建立入室第一印象，其餘房間以彈性家具為主。";
-                bathText = "浴室全翻新基本門檻約需要 <b>30 萬/間</b>（含拆除防水、貼磚與衛浴設備）。目前預算建議以<b>局部更換衛浴設備或止滑塗料</b>為主。";
-            } 
-            else if (budgetInWan >= 80 && budgetInWan < 150) {
-                // 80-150萬（中等新成屋主力預算）
-                spaceListHTML = `
-                    <li><b>客廳核心</b>：完整玄關鞋櫃、電視造型牆與收納展示系統。</li>
-                    <li><b>主臥房間</b>：頂天立地客製化系統衣櫃、床頭板風格造型。</li>
-                    <li><b>餐廚空間</b>：中島餐櫃整合或餐廚收納延伸。</li>
-                `;
-                cabinetText = "預算充足支援<b>「公領域 + 主臥室完整系統櫃設計」</b>，可選用高質感防潮板材與局部隱藏門縫工藝，兼具實用與整體感。";
-                
-                if (houseType === 'old') {
-                    bathText = "若需翻新 1 間浴室（約 <b>30 萬</b>），會佔據約 20%~35% 的總預算，建議將其餘基礎水電與木作比例調配得更精準。";
-                } else {
-                    bathText = "新成屋建商已附衛浴情況下，建議保留預算於全屋系統櫃與風格燈光造景，浴室僅需增加鏡櫃與乾濕分離配件。";
-                }
-            } 
-            else {
-                // 150萬以上（高預算全屋重構/老屋大翻修）
-                spaceListHTML = `
-                    <li><b>全屋場域重構</b>：客廳大器主牆、獨立玄關、開放式餐廚整合。</li>
-                    <li><b>全房型系統收納</b>：主臥衣帽間、次臥與多功能書房系統櫃訂製。</li>
-                    <li><b>頂級細節工藝</b>：特殊塗料、特殊隱藏門、鍍鈦與氣氛燈帶。</li>
-                `;
-                cabinetText = "預算極為寬裕，可進行<b>「全屋全客製系統櫃 + 藝術木作門頁」</b>，連同隱藏門、滑門與展示燈條一併整合，打造極致整體感。";
-                bathText = "預算足夠進行 <b>1~2 間浴室完全重構（每間約 30 萬）</b>，包含升級進口磁磚、埋壁式龍頭與精品衛浴設備。";
+            ctx.strokeStyle = "rgba(197, 168, 128, 0.3)";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+            // 3. 標題與品牌
+            ctx.fillStyle = "#9a7b52";
+            ctx.font = "bold 32px 'Noto Serif TC', serif";
+            ctx.textAlign = "center";
+            ctx.fillText("一森室內設計 ESAN DESIGN", canvas.width / 2, 100);
+
+            ctx.fillStyle = "#242c27";
+            ctx.font = "bold 26px 'Noto Serif TC', serif";
+            ctx.fillText("理想生活 ｜ 專屬裝修需求諮詢卡", canvas.width / 2, 145);
+
+            // 分割線
+            ctx.beginPath();
+            ctx.moveTo(80, 175);
+            ctx.lineTo(canvas.width - 80, 175);
+            ctx.strokeStyle = "#e8e4dc";
+            ctx.stroke();
+
+            // 4. 客戶基本資訊區塊
+            ctx.textAlign = "left";
+            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#9a7b52";
+            ctx.fillText("✦ 客戶基本資訊", 80, 220);
+
+            ctx.font = "20px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#242c27";
+            ctx.fillText(`稱　　呼：${name}`, 100, 265);
+            ctx.fillText(`聯絡電話：${phone}`, 100, 305);
+            ctx.fillText(`建案/地址：${project}`, 100, 345);
+            ctx.fillText(`方便聯絡：${time}`, 100, 385);
+
+            // 5. 裝修條件與預算
+            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#9a7b52";
+            ctx.fillText("✦ 空間規劃與預算方向", 80, 445);
+
+            ctx.font = "20px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#242c27";
+            ctx.fillText(`預算金額：約 ${budget} 萬元`, 100, 490);
+            ctx.fillText(`房屋現況：${houseType}`, 100, 530);
+            ctx.fillText(`嚮往風格：${style}`, 100, 570);
+
+            // 6. 系統預估建議與結論
+            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#9a7b52";
+            ctx.fillText("✦ 系統初步分析建議", 80, 630);
+
+            ctx.font = "18px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#66726a";
+            let advice1 = `• 預算落在 ${budget} 萬，建議優先聚焦於「公領域門面收納與主臥室完整系統櫃」。`;
+            let advice2 = `• 浴室全翻新門檻約 30 萬/間，將根據實際需求調配基礎工程比重。`;
+            ctx.fillText(advice1, 100, 675);
+            ctx.fillText(advice2, 100, 710);
+
+            // 7. 簡述需求
+            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#9a7b52";
+            ctx.fillText("✦ 簡述需求與重點", 80, 770);
+
+            ctx.font = "18px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#242c27";
+            
+            // 自動換行處理需求文字
+            const maxCharPerLine = 32;
+            let lineY = 810;
+            for (let i = 0; i < needs.length; i += maxCharPerLine) {
+                ctx.fillText(needs.substring(i, i + maxCharPerLine), 100, lineY);
+                lineY += 30;
             }
 
-            // 更新 DOM
-            document.getElementById('resBadge').innerText = `${styleName} 風格 ｜ 預算提案`;
-            document.getElementById('resTitle').innerText = `${budgetInWan} 萬預算規劃分析`;
-            document.getElementById('spaceFocusList').innerHTML = spaceListHTML;
-            document.getElementById('cabinetAdvice').innerHTML = cabinetText;
-            document.getElementById('bathroomAdvice').innerHTML = bathText;
+            // 8. 頁腳引導
+            ctx.fillStyle = "#9a7b52";
+            ctx.fillRect(40, 950, canvas.width - 80, 50);
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 18px 'Noto Serif TC', serif";
+            ctx.textAlign = "center";
+            ctx.fillText("請將此諮詢卡傳送至一森官方 LINE，將有專屬設計師為您服務", canvas.width / 2, 982);
+
+            // 轉成 Base64 圖片並顯示
+            const dataURL = canvas.toDataURL('image/png');
+            document.getElementById('generatedImage').src = dataURL;
 
             const resultBox = document.getElementById('resultBox');
             resultBox.style.display = 'block';
