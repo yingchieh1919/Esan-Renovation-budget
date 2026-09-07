@@ -36,7 +36,7 @@
 
         .calculator-card {
             background: var(--card-bg);
-            padding: 40px 32px;
+            padding: 36px 32px;
             border-radius: 16px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
             max-width: 480px;
@@ -48,54 +48,55 @@
         /* 品牌的 Logo SVG 圖示與文字 */
         .brand-header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
+        /* 調整 Logo 尺寸，使其更精緻小巧 */
         .brand-logo-svg {
-            width: 70px;
+            width: 42px;
             height: auto;
             margin: 0 auto 10px auto;
             display: block;
         }
 
         .brand-title {
-            font-size: 1.4rem;
-            letter-spacing: 0.18em;
+            font-size: 1.25rem;
+            letter-spacing: 0.2em;
             color: var(--gold-dark);
             font-weight: 700;
             margin: 0;
-            text-indent: 0.18em;
+            text-indent: 0.2em;
         }
 
         .brand-subtitle {
-            font-size: 0.75rem;
-            letter-spacing: 0.22em;
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
             color: var(--gold-primary);
             margin-top: 4px;
             font-weight: 400;
             text-transform: uppercase;
-            text-indent: 0.22em;
+            text-indent: 0.25em;
         }
 
         .page-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-dark);
             text-align: center;
-            margin: 20px 0 6px 0;
+            margin: 18px 0 6px 0;
             font-weight: 600;
             letter-spacing: 0.05em;
         }
 
         .page-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
         /* 表單區域 */
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         label {
@@ -103,7 +104,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--text-dark);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             letter-spacing: 0.02em;
         }
 
@@ -134,13 +135,13 @@
             color: #ffffff;
             border: none;
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 600;
             cursor: pointer;
             letter-spacing: 0.1em;
             transition: opacity 0.2s, transform 0.1s;
-            margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(168, 137, 94, 0.3);
+            margin-top: 6px;
+            box-shadow: 0 4px 12px rgba(168, 137, 94, 0.25);
             font-family: inherit;
         }
 
@@ -154,44 +155,44 @@
 
         /* 結果展示區 */
         .result {
-            margin-top: 30px;
-            padding-top: 24px;
+            margin-top: 26px;
+            padding-top: 22px;
             border-top: 1px solid var(--border-color);
             animation: fadeIn 0.4s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .result-title {
             margin: 0;
             color: var(--text-muted);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 600;
             letter-spacing: 0.05em;
         }
 
         .total-price {
-            font-size: 2rem;
+            font-size: 1.9rem;
             color: var(--gold-dark);
             font-weight: 700;
-            margin: 8px 0 18px 0;
+            margin: 6px 0 16px 0;
             letter-spacing: 0.02em;
         }
 
         .detail-list {
             background: #f2efe9;
             border: 1px solid var(--border-color);
-            padding: 18px;
+            padding: 16px;
             border-radius: 8px;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: var(--text-dark);
         }
 
         .detail-list p {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-weight: 600;
             color: var(--text-dark);
         }
@@ -208,9 +209,9 @@
         }
 
         .note {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            margin-top: 18px;
+            margin-top: 16px;
             margin-bottom: 0;
             line-height: 1.5;
         }
@@ -224,7 +225,7 @@
             text-decoration: none;
             padding: 10px;
             border-radius: 6px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             margin-top: 16px;
             transition: all 0.2s;
@@ -242,7 +243,8 @@
         <!-- 品牌標誌與抬頭 -->
         <div class="brand-header">
             <svg class="brand-logo-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M45 10 L55 10 L50 45 L80 45 L20 110 L40 60 L15 60 Z" fill="url(#goldGradient)"/>
+                <!-- 正確的一森幾何造型 Logo -->
+                <path d="M48 5 L55 5 L43 52 L82 52 L18 115 L36 62 L12 62 Z" fill="url(#goldGradient)"/>
                 <defs>
                     <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#E6D3B8"/>
