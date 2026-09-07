@@ -1,482 +1,357 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一森室內設計 ESAN | 理想生活風格與空間提案</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #2b3830;
-            --card-bg: #faf9f6;
-            --gold-primary: #c5a880;
-            --gold-dark: #a8895e;
-            --text-dark: #1f2722;
-            --text-muted: #5e6b63;
-            --border-color: #e2ded7;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>裝修預算與未來規劃試算</title>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(180deg, #F9F5F0 0%, #EFE8DF 100%);
+      color: #4A3728;
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    
+    .mobile-container {
+      width: 100%;
+      max-width: 414px;
+      margin: 0 auto;
+    }
 
-        body {
-            font-family: 'Noto Serif TC', -apple-system, BlinkMacSystemFont, "Segoe UI", serif;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(#3a4a40 1px, transparent 1px);
-            background-size: 24px 24px;
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-            color: var(--text-dark);
-        }
+    .header {
+      text-align: center;
+      padding: 12px 0 18px 0;
+    }
+    .header .cafe-badge {
+      display: inline-block;
+      background: #4A3728;
+      color: #F9F5F0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #362518;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.5px;
+    }
+    .header p {
+      font-size: 13px;
+      color: #8C7665;
+      margin: 0;
+    }
 
-        .calculator-card {
-            background: var(--card-bg);
-            padding: 40px 32px;
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-            max-width: 480px;
-            width: 100%;
-            border: 1px solid rgba(197, 168, 128, 0.3);
-            position: relative;
-        }
+    .card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 20px rgba(74, 55, 40, 0.05);
+      border: 1px solid #EFE5DA;
+    }
+    
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #8C5A32;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        /* 品牌 Header */
-        .brand-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    /* 裝修類型按鈕 */
+    .preset-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .preset-btn {
+      background: #FAF6F0;
+      border: 1px solid #EFE5DA;
+      border-radius: 12px;
+      padding: 10px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #6E5A4B;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      line-height: 1.3;
+    }
+    .preset-btn.active {
+      background: #8C5A32;
+      color: #FFFFFF;
+      border-color: #8C5A32;
+    }
 
-        .brand-logo-img {
-            max-width: 130px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-        }
+    .input-item {
+      margin-bottom: 12px;
+    }
+    .input-item:last-child {
+      margin-bottom: 0;
+    }
 
-        .page-title {
-            font-size: 1.25rem;
-            color: var(--text-dark);
-            text-align: center;
-            margin: 18px 0 6px 0;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #5C4737;
+      margin-bottom: 6px;
+    }
 
-        .page-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-align: center;
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-        /* 進度條與步驟 */
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
+    input {
+      width: 100%;
+      height: 44px;
+      background-color: #FAF6F0;
+      border: 1.5px solid #EFE5DA;
+      border-radius: 12px;
+      padding: 0 36px 0 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #362518;
+      outline: none;
+      transition: all 0.2s ease;
+    }
 
-        .step-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--border-color);
-            transition: all 0.3s;
-        }
+    input:focus {
+      background-color: #FFFFFF;
+      border-color: #8C5A32;
+      box-shadow: 0 0 0 3px rgba(140, 90, 50, 0.12);
+    }
 
-        .step-dot.active {
-            background-color: var(--gold-primary);
-            width: 24px;
-            border-radius: 4px;
-        }
+    .unit {
+      position: absolute;
+      right: 12px;
+      font-size: 13px;
+      color: #A39081;
+      font-weight: 500;
+      pointer-events: none;
+    }
 
-        /* 測驗問題樣式 */
-        .quiz-section {
-            display: block;
-            animation: fadeIn 0.4s ease-out;
-        }
+    .btn-calc {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #4A3728 0%, #322318 100%);
+      color: #F9F5F0;
+      border: none;
+      border-radius: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(74, 55, 40, 0.25);
+      transition: transform 0.1s ease;
+      margin-top: 4px;
+    }
+    .btn-calc:active { transform: scale(0.97); }
 
-        .question-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 14px;
-            line-height: 1.5;
-        }
+    .result-box {
+      display: none;
+      animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        .option-btn {
-            width: 100%;
-            padding: 14px 16px;
-            margin-bottom: 10px;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            text-align: left;
-            font-size: 0.88rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            display: block;
-        }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .option-btn:hover {
-            border-color: var(--gold-primary);
-            background-color: #fcfaf7;
-            transform: translateX(4px);
-        }
+    .gap-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(74, 55, 40, 0.08);
+      margin-bottom: 14px;
+      border: 1px solid #EFE5DA;
+    }
 
-        /* 表單區域 (步驟 4) */
-        .form-section {
-            display: none;
-            animation: fadeIn 0.4s ease-out;
-        }
+    .gap-title {
+      font-size: 13px;
+      color: #8C7665;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .gap-amount {
+      font-size: 32px;
+      font-weight: 800;
+      color: #C85A32;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.88rem;
-        }
+    .agent-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 22px 20px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(74, 55, 40, 0.06);
+      border: 2px solid #EAE0D3;
+    }
 
-        input[type="number"], select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 0.92rem;
-            color: var(--text-dark);
-            background-color: #ffffff;
-            transition: all 0.25s ease;
-            font-family: inherit;
-        }
+    .agent-avatar-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 10px auto;
+      border: 3px solid #DCCBBA;
+      box-shadow: 0 4px 12px rgba(74, 55, 40, 0.15);
+      display: block;
+    }
 
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.98rem;
-            font-weight: 600;
-            cursor: pointer;
-            letter-spacing: 0.1em;
-            transition: opacity 0.2s, transform 0.1s;
-            margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(168, 137, 94, 0.25);
-            font-family: inherit;
-        }
+    .agent-name {
+      font-size: 19px;
+      font-weight: 800;
+      color: #362518;
+    }
 
-        .submit-btn:hover { opacity: 0.92; }
+    .agent-subtitle {
+      font-size: 12px;
+      color: #8C5A32;
+      font-weight: 700;
+      margin-top: 2px;
+    }
 
-        /* 風格分析結果卡片 */
-        .style-badge {
-            background-color: #f2efe9;
-            border-left: 3px solid var(--gold-primary);
-            padding: 12px 16px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 18px;
-            font-size: 0.88rem;
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
+    .agent-desc {
+      font-size: 13px;
+      color: #6E5A4B;
+      margin: 10px 0 16px 0;
+      line-height: 1.5;
+      background: #FAF6F0;
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
 
-        /* 結果展示區 */
-        .result {
-            display: none;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            animation: fadeIn 0.4s ease-out;
-        }
+    .btn-contact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .total-price {
-            font-size: 1.8rem;
-            color: var(--gold-dark);
-            font-weight: 700;
-            margin: 6px 0 16px 0;
-        }
-
-        .detail-list {
-            background: #f2efe9;
-            border: 1px solid var(--border-color);
-            padding: 18px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            color: var(--text-dark);
-        }
-
-        .detail-list ul {
-            padding-left: 0;
-            list-style: none;
-            margin: 0;
-            line-height: 1.9;
-        }
-
-        .detail-list li {
-            position: relative;
-            padding-left: 18px;
-            margin-bottom: 6px;
-        }
-
-        .detail-list li::before {
-            content: "•";
-            color: var(--gold-primary);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-        }
-
-        .detail-list li span {
-            color: var(--gold-dark);
-            font-weight: 700;
-        }
-
-        .note {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 18px;
-            line-height: 1.6;
-        }
-
-        .action-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 18px;
-        }
-
-        .contact-btn {
-            display: block;
-            text-align: center;
-            background: var(--gold-primary);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.25s;
-            box-shadow: 0 2px 8px rgba(197, 168, 128, 0.3);
-        }
-
-        .contact-btn:hover {
-            background: var(--gold-dark);
-        }
-
-        .print-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: transparent;
-            border: 1px solid var(--gold-primary);
-            color: var(--gold-dark);
-            padding: 11px;
-            border-radius: 6px;
-            font-size: 0.88rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s;
-            font-family: inherit;
-        }
-
-        .print-btn:hover {
-            background: #f2efe9;
-        }
-
-        /* 專屬 PDF / 列印樣式優化 */
-        @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-            .calculator-card {
-                box-shadow: none;
-                border: none;
-                max-width: 100%;
-                width: 100%;
-                padding: 0;
-            }
-            .step-indicator, .form-group, .submit-btn, .action-group {
-                display: none !important;
-            }
-            .result {
-                display: block !important;
-                border-top: none;
-            }
-        }
-    </style>
+    .btn-line-style {
+      background-color: #06C755;
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(6, 199, 85, 0.2);
+    }
+  </style>
 </head>
 <body>
 
-    <div class="calculator-card">
-        <!-- 品牌 Logo (已更新檔名) -->
-        <div class="brand-header">
-            <img src="logo.PNG" alt="一森室內設計 ESAN INTERIOR DESIGN" class="brand-logo-img">
-        </div>
+<div class="mobile-container">
+  
+  <div class="header">
+    <div class="cafe-badge">HOME & BUDGET</div>
+    <h1>裝修預算試算機 🏠</h1>
+    <p>打造理想居家，為您快速評估預算需求</p>
+  </div>
 
-        <div class="page-title" id="mainTitle">理想生活風格診斷</div>
-        <p class="page-subtitle" id="mainSubtitle">只需 30 秒，陪伴您探索對『家』的真實憧憬</p>
-
-        <!-- 步驟指示點 -->
-        <div class="step-indicator">
-            <div class="step-dot active" id="dot1"></div>
-            <div class="step-dot" id="dot2"></div>
-            <div class="step-dot" id="dot3"></div>
-            <div class="step-dot" id="dot4"></div>
-        </div>
-
-        <!-- 測驗 Q1 -->
-        <div class="quiz-section" id="q1">
-            <div class="question-title">Q1. 想像一個理想的週末早晨，您最期待身處什麼樣的氛圍？</div>
-            <button class="option-btn" onclick="nextQuestion(1, 'wabi')">☕ 陽光灑在溫潤木質與微水泥上，靜靜享用一杯手沖</button>
-            <button class="option-btn" onclick="nextQuestion(1, 'modern')">✨ 乾淨俐落的線條與明亮採光，開啟高效沉穩的一天</button>
-            <button class="option-btn" onclick="nextQuestion(1, 'luxury')">🛋️ 典雅大氣的石材與細緻燈光，享受如精品飯店般的包覆感</button>
-        </div>
-
-        <!-- 測驗 Q2 -->
-        <div class="quiz-section" id="q2" style="display: none;">
-            <div class="question-title">Q2. 當您回到家時，哪種感受最能讓您徹底放鬆？</div>
-            <button class="option-btn" onclick="nextQuestion(2, 'wabi')">🌿 自然大地色系，沒有過多雜飾的純粹與平靜</button>
-            <button class="option-btn" onclick="nextQuestion(2, 'modern')">📐 收納妥當、毫無雜物的寬敞視覺空間</button>
-            <button class="option-btn" onclick="nextQuestion(2, 'luxury')">🍷 個性化的燈光氛圍與精緻質感的觸覺體驗</button>
-        </div>
-
-        <!-- 測驗 Q3 -->
-        <div class="quiz-section" id="q3" style="display: none;">
-            <div class="question-title">Q3. 在未來的空間裡，您最看重的生活核心是？</div>
-            <button class="option-btn" onclick="nextQuestion(3, 'wabi')">🍵 留白的心靈角落，能與家人自然互動的暖心場域</button>
-            <button class="option-btn" onclick="nextQuestion(3, 'modern')">💻 流暢的居家動線，兼具辦公與休閒的高機能設計</button>
-            <button class="option-btn" onclick="nextQuestion(3, 'luxury')">🥂 款待好友的中島餐廚，展現個人品味的生活展示台</button>
-        </div>
-
-        <!-- 步驟 4：風格分析與坪數試算 -->
-        <div class="form-section" id="formSection">
-            <div class="style-badge" id="styleBadge">
-                <!-- JavaScript 動態帶入風格名稱與描述 -->
-            </div>
-
-            <div class="form-group">
-                <label for="ping">期待規劃的空間坪數：</label>
-                <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
-            </div>
-
-            <div class="form-group">
-                <label for="houseType">空間現狀與工程型態：</label>
-                <select id="houseType">
-                    <option value="150000">新成屋客製｜打造簡約細緻的專屬風格</option>
-                    <option value="210000">中古老屋煥新｜重塑安全與通透的空間動線</option>
-                    <option value="80000">輕裝修微調整｜品味傢俱與軟裝質感提案</option>
-                </select>
-            </div>
-
-            <button class="submit-btn" onclick="calculateBudget()">檢視一森生活提案試算</button>
-        </div>
-
-        <!-- 結果展示區 -->
-        <div class="result" id="resultBox">
-            <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">整體空間規劃參考範疇</div>
-            <div class="total-price" id="totalPrice">$0</div>
-            
-            <div class="detail-list">
-                <p style="margin:0 0 10px 0; font-weight:600;">資源挹注的溫度分配：</p>
-                <ul>
-                    <li>奠定安心與質感的基礎硬體：<span id="hardBuild">$0</span></li>
-                    <li>陪伴日常的質感傢俱與家電：<span id="furniture">$0</span></li>
-                    <li>點綴生活儀式感的軟裝細節：<span id="decor">$0</span></li>
-                </ul>
-            </div>
-            
-            <p class="note">※ 一森叮嚀：每一個家的生活習慣皆是獨一無二的，這份提案是我們交流的起點，我們更期待聽您分享心中的理想生活。</p>
-            
-            <div class="action-group">
-                <!-- 已更新官方 LINE 連結 -->
-                <a href="https://lin.ee/r7WmTui" target="_blank" class="contact-btn">與一森聊聊您的生活憧憬 (LINE)</a>
-                <!-- 新增儲存 PDF 功能 -->
-                <button class="print-btn" onclick="window.print()">📄 儲存/列印專屬生活提案 (PDF)</button>
-            </div>
-        </div>
+  <div class="card">
+    <div class="section-title">🏡 1. 選擇裝修類型（低標估計）</div>
+    
+    <!-- 裝修類型切換按鈕 -->
+    <div class="preset-group">
+      <div class="preset-btn active" onclick="setRenovationType(1000000, this)">🆕 新成屋<br>100萬起</div>
+      <div class="preset-btn" onclick="setRenovationType(2000000, this)">🏚️ 老屋翻新<br>200萬起</div>
+      <div class="preset-btn" onclick="setRenovationType(600000, this)">🛠️ 微調裝修<br>60萬起</div>
     </div>
 
-    <script>
-        let scores = { wabi: 0, modern: 0, luxury: 0 };
+    <div class="input-item">
+      <label>預計裝修預算</label>
+      <div class="input-wrapper">
+        <input type="number" id="renovationBudget" value="1000000">
+        <span class="unit">元</span>
+      </div>
+    </div>
+  </div>
 
-        function nextQuestion(currentQ, type) {
-            scores[type]++;
-            document.getElementById(`q${currentQ}`).style.display = 'none';
+  <div class="card">
+    <div class="section-title">💰 2. 目前已準備資金</div>
 
-            if (currentQ < 3) {
-                const nextQ = currentQ + 1;
-                document.getElementById(`q${nextQ}`).style.display = 'block';
-                document.getElementById(`dot${nextQ}`).classList.add('active');
-            } else {
-                showFormSection();
-            }
-        }
+    <div class="input-item">
+      <label>已準備自備款/裝修基金</label>
+      <div class="input-wrapper">
+        <input type="number" id="currentSavings" value="500000">
+        <span class="unit">元</span>
+      </div>
+    </div>
+  </div>
 
-        function showFormSection() {
-            document.getElementById('dot4').classList.add('active');
-            document.getElementById('mainTitle').innerText = "您的專屬生活風格側寫";
-            document.getElementById('mainSubtitle').innerText = "結合您的品味偏好，為您試算空間規劃範疇";
-            document.getElementById('formSection').style.display = 'block';
+  <button class="btn-calc" onclick="calculate()">🔨 開始裝修預算試算</button>
 
-            let topStyle = 'wabi';
-            if (scores.modern > scores.wabi && scores.modern >= scores.luxury) {
-                topStyle = 'modern';
-            } else if (scores.luxury > scores.wabi && scores.luxury > scores.modern) {
-                topStyle = 'luxury';
-            }
+  <div class="result-box" id="resultBox">
+    <div style="height: 16px;"></div>
 
-            const badge = document.getElementById('styleBadge');
-            if (topStyle === 'wabi') {
-                badge.innerHTML = `<strong>✨ 偏好風格：自然溫潤 ✕ 日式侘寂 / 輕現代</strong><br>您追求心靈的寧靜與純粹，偏好木質、自然塗料與溫柔的光影，注重空間的溫度與包覆感。`;
-            } else if (topStyle === 'modern') {
-                badge.innerHTML = `<strong>✨ 偏好風格：極簡俐落 ✕ 現代機能</strong><br>您注重條理與空間效益，偏好俐落的幾何線條、通透採光與強大的收納機能，享受無負擔的生活空間。`;
-            } else {
-                badge.innerHTML = `<strong>✨ 偏好風格：尊爵質感 ✕ 輕奢飯店風</strong><br>您擁有敏銳的品味感官，偏好大理石、精緻金屬與層次豐富的氛圍燈光，追求如精品旅店般的生活儀式感。`;
-            }
-        }
+    <div class="gap-card">
+      <div class="gap-title">預估裝修資金缺口</div>
+      <div class="gap-amount" id="budgetGap">$0</div>
+    </div>
 
-        function calculateBudget() {
-            const pingInput = document.getElementById('ping').value;
-            const ping = parseFloat(pingInput);
-            const costPerPing = parseFloat(document.getElementById('houseType').value);
+    <div class="agent-card">
+      <img src="avatar.jpg" class="agent-avatar-img" alt="陳瑩婕店長" onerror="this.src='https://picsum.photos/200'">
+      <div class="agent-name">陳瑩婕</div>
+      <div class="agent-subtitle">保險咖啡館 駐店顧問</div>
+      
+      <div class="agent-desc">
+        🏠「讓每一分錢都花在刀口上」<br>
+        想了解如何透過理財規劃或專屬保障，補足裝修資金缺口？歡迎加 LINE 免費諮詢！
+      </div>
+      
+      <a href="https://lin.ee/9ul2awK" target="_blank" id="lineBtn" class="btn-contact btn-line-style">💬 加 LINE 傳送報告，領取專屬諮詢</a>
+    </div>
 
-            if (!ping || ping <= 0) {
-                alert("請輸入正確的坪數！");
-                return;
-            }
+  </div>
 
-            const totalEstimate = ping * costPerPing;
-            const hardBuild = Math.round(totalEstimate * 0.6);
-            const furniture = Math.round(totalEstimate * 0.3);
-            const decor = Math.round(totalEstimate * 0.1);
+</div>
 
-            document.getElementById('totalPrice').innerText = `約 $${totalEstimate.toLocaleString()} 元起`;
-            document.getElementById('hardBuild').innerText = `$${hardBuild.toLocaleString()} 元`;
-            document.getElementById('furniture').innerText = `$${furniture.toLocaleString()} 元`;
-            document.getElementById('decor').innerText = `$${decor.toLocaleString()} 元`;
+<script>
+  function setRenovationType(amount, btnElement) {
+    document.getElementById('renovationBudget').value = amount;
+    const btns = document.querySelectorAll('.preset-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+  }
 
-            document.getElementById('resultBox').style.display = 'block';
-        }
-    </script>
+  function calculate() {
+    const budget = parseFloat(document.getElementById('renovationBudget').value) || 0;
+    const savings = parseFloat(document.getElementById('currentSavings').value) || 0;
+    const gap = Math.max(0, budget - savings);
+
+    document.getElementById('budgetGap').innerText = '$' + gap.toLocaleString();
+
+    const msg = encodeURIComponent(`店長你好，我試算了裝修預算：\n需求預算：$${budget.toLocaleString()}元\n已準備：$${savings.toLocaleString()}元\n預估資金缺口為：$${gap.toLocaleString()}元，想了解相關理財規劃！`);
+    document.getElementById('lineBtn').href = `https://lin.ee/9ul2awK?text=${msg}`;
+
+    const resultBox = document.getElementById('resultBox');
+    resultBox.style.display = 'block';
+    resultBox.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
 </body>
 </html>
