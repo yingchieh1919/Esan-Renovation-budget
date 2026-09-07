@@ -210,7 +210,6 @@
 
         .submit-btn:hover { opacity: 0.95; transform: translateY(-1px); }
 
-        /* 結果預覽區 */
         .result-panel {
             margin-top: 30px;
             padding-top: 24px;
@@ -273,7 +272,7 @@
         </div>
 
         <div class="page-title">理想生活規劃諮詢</div>
-        <p class="page-subtitle">請填寫您的基本資訊與預算，系統將自動生成專屬諮詢卡</p>
+        <p class="page-subtitle">請填寫您的基本資訊與預算，系統將自動生成詳細分析諮詢卡</p>
         
         <!-- 1. 客戶個人資訊 -->
         <div class="section-label">基本聯絡資訊</div>
@@ -337,7 +336,7 @@
             <textarea id="custNeeds" placeholder="例如：希望增加主臥收納、客廳要能擺放65吋電視、浴室乾濕分離..."></textarea>
         </div>
 
-        <button class="submit-btn" onclick="generateImageCard()">生成專屬諮詢卡</button>
+        <button class="submit-btn" onclick="generateImageCard()">生成詳細諮詢卡</button>
 
         <!-- 圖檔生成結論與預覽 -->
         <div class="result-panel" id="resultBox">
@@ -355,7 +354,8 @@
         </div>
     </div>
 
-    <canvas id="cardCanvas" width="800" height="1050"></canvas>
+    <!-- 畫布高度調整為 1200px 放置詳細內容 -->
+    <canvas id="cardCanvas" width="800" height="1200"></canvas>
 
     <script>
         function selectStyle(element) {
@@ -369,7 +369,7 @@
             const phone = document.getElementById('custPhone').value.trim();
             const project = document.getElementById('custProject').value.trim() || "未提供";
             const time = document.getElementById('custTime').value;
-            const budget = document.getElementById('budgetInput').value;
+            const budgetVal = parseFloat(document.getElementById('budgetInput').value) || 100;
             const houseType = document.getElementById('houseType').value;
             const style = document.querySelector('input[name="styleChoice"]:checked').value;
             const needs = document.getElementById('custNeeds').value.trim() || "無特別備註";
@@ -379,12 +379,39 @@
                 return;
             }
 
+            // 動態分析建議生成邏輯
+            let hardRatio = "60%", softRatio = "30%", feeRatio = "10%";
+            let hardAmt = Math.round(budgetVal * 0.6);
+            let softAmt = Math.round(budgetVal * 0.3);
+
+            let allocAdvice = `建議配比：硬裝保護與系統櫃 (${hardRatio} 約 ${hardAmt}萬) ｜ 家具家電 (${softRatio} 約 ${softAmt}萬)`;
+            let cabinetAdvice = "";
+            let bathAdvice = "";
+
+            if (budgetVal < 80) {
+                cabinetAdvice = "重點佈局：客廳懸空電視櫃、玄關鞋櫃整合；次臥建議保留彈性，先以現成家具過渡。";
+                bathAdvice = "浴室評估：翻新單價約 30 萬/間，預算有限下建議先做局部乾濕分離配件升級。";
+            } else if (budgetVal >= 80 && budgetVal < 160) {
+                cabinetAdvice = "重點佈局：客廳全座向收納電視牆、主臥頂天立地滑門/開門衣櫃、餐廚中島餐櫃整合。";
+                if (houseType === "老屋翻新") {
+                    bathAdvice = "浴室評估：老屋拆除與防水全重做（約30萬/間），需注意水電重拉佔總預算比重。";
+                } else {
+                    bathAdvice = "浴室評估：新成屋已有建商設備，建議保留原預算轉投入全屋客製化系統櫃與氛圍燈光。";
+                }
+            } else {
+                cabinetAdvice = "重點佈局：全屋客製化隱藏門系統櫃、獨立衣帽間、藝術特殊塗料主牆與精品展示燈帶。";
+                bathAdvice = "浴室評估：預算充裕支援 1~2 間浴室深度重構（每間約30萬），可升級埋壁式龍頭與進口大版磚。";
+            }
+
+            // 開始畫 Canvas
             const canvas = document.getElementById('cardCanvas');
             const ctx = canvas.getContext('2d');
 
+            // 底色
             ctx.fillStyle = "#faf8f5";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+            // 雙層奢華外框
             ctx.strokeStyle = "#c5a880";
             ctx.lineWidth = 6;
             ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
@@ -393,76 +420,111 @@
             ctx.lineWidth = 1;
             ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
 
+            // 標題
             ctx.fillStyle = "#9a7b52";
-            ctx.font = "bold 32px 'Noto Serif TC', serif";
+            ctx.font = "bold 30px 'Noto Serif TC', serif";
             ctx.textAlign = "center";
-            ctx.fillText("一森室內設計 ESAN DESIGN", canvas.width / 2, 100);
+            ctx.fillText("一森室內設計 ESAN DESIGN", canvas.width / 2, 95);
 
             ctx.fillStyle = "#242c27";
-            ctx.font = "bold 26px 'Noto Serif TC', serif";
-            ctx.fillText("理想生活 ｜ 專屬裝修需求諮詢卡", canvas.width / 2, 145);
+            ctx.font = "bold 24px 'Noto Serif TC', serif";
+            ctx.fillText("理想生活 ｜ 專屬裝修需求與初步分析指南", canvas.width / 2, 138);
 
+            // 分割線
             ctx.beginPath();
-            ctx.moveTo(80, 175);
-            ctx.lineTo(canvas.width - 80, 175);
+            ctx.moveTo(80, 165);
+            ctx.lineTo(canvas.width - 80, 165);
             ctx.strokeStyle = "#e8e4dc";
             ctx.stroke();
 
+            // 1. 基本資訊區塊
             ctx.textAlign = "left";
-            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 客戶基本資訊", 80, 220);
+            ctx.fillText("✦ 客戶基本資訊", 80, 205);
 
-            ctx.font = "20px 'Noto Serif TC', serif";
+            ctx.font = "19px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText(`稱　　呼：${name}`, 100, 265);
-            ctx.fillText(`聯絡電話：${phone}`, 100, 305);
-            ctx.fillText(`建案/地址：${project}`, 100, 345);
-            ctx.fillText(`方便聯絡：${time}`, 100, 385);
+            ctx.fillText(`稱　　呼：${name}`, 100, 245);
+            ctx.fillText(`聯絡電話：${phone}`, 100, 280);
+            ctx.fillText(`建案/地址：${project}`, 100, 315);
+            ctx.fillText(`方便聯絡：${time}`, 100, 350);
 
-            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            // 2. 空間條件
+            ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 空間規劃與預算方向", 80, 445);
+            ctx.fillText("✦ 空間規劃條件", 80, 405);
 
-            ctx.font = "20px 'Noto Serif TC', serif";
+            ctx.font = "19px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText(`預算金額：約 ${budget} 萬元`, 100, 490);
-            ctx.fillText(`房屋現況：${houseType}`, 100, 530);
-            ctx.fillText(`嚮往風格：${style}`, 100, 570);
+            ctx.fillText(`規劃預算：約 ${budgetVal} 萬元`, 100, 445);
+            ctx.fillText(`房屋現況：${houseType}`, 100, 480);
+            ctx.fillText(`嚮往風格：${style}`, 100, 515);
 
-            ctx.font = "bold 22px 'Noto Serif TC', serif";
+            // 3. 詳細分析建議
+            ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 系統初步分析建議", 80, 630);
+            ctx.fillText("✦ 專業初步分析建議 (一森團隊評估)", 80, 575);
 
-            ctx.font = "18px 'Noto Serif TC', serif";
+            // 建議 1: 比重分配
+            ctx.font = "bold 18px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#242c27";
+            ctx.fillText("① 資源預算分配", 100, 615);
+            ctx.font = "17px 'Noto Serif TC', serif";
             ctx.fillStyle = "#66726a";
-            let advice1 = `• 預算落在 ${budget} 萬，建議優先聚焦於「公領域門面收納與主臥室完整系統櫃」。`;
-            let advice2 = `• 浴室全翻新門檻約 30 萬/間，將根據實際需求調配基礎工程比重。`;
-            ctx.fillText(advice1, 100, 675);
-            ctx.fillText(advice2, 100, 710);
+            ctx.fillText(allocAdvice, 120, 645);
 
-            ctx.font = "bold 22px 'Noto Serif TC', serif";
-            ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 簡述需求與重點", 80, 770);
-
-            ctx.font = "18px 'Noto Serif TC', serif";
+            // 建議 2: 系統櫃佈局
+            ctx.font = "bold 18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
+            ctx.fillText("② 核心系統櫃與場域落點", 100, 690);
+            ctx.font = "17px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#66726a";
             
-            const maxCharPerLine = 32;
-            let lineY = 810;
-            for (let i = 0; i < needs.length; i += maxCharPerLine) {
-                ctx.fillText(needs.substring(i, i + maxCharPerLine), 100, lineY);
-                lineY += 30;
+            // 換行繪製 cabinetAdvice
+            let cabY = 720;
+            const maxChars = 34;
+            for (let i = 0; i < cabinetAdvice.length; i += maxChars) {
+                ctx.fillText(cabinetAdvice.substring(i, i + maxChars), 120, cabY);
+                cabY += 28;
             }
 
+            // 建議 3: 衛浴與基礎工程
+            ctx.font = "bold 18px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#242c27";
+            ctx.fillText("③ 衛浴工程與基礎建議 (基本門檻 30萬/間)", 100, cabY + 15);
+            ctx.font = "17px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#66726a";
+            
+            let bathY = cabY + 45;
+            for (let i = 0; i < bathAdvice.length; i += maxChars) {
+                ctx.fillText(bathAdvice.substring(i, i + maxChars), 120, bathY);
+                bathY += 28;
+            }
+
+            // 4. 簡述需求
+            ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillRect(40, 950, canvas.width - 80, 50);
+            ctx.fillText("✦ 客戶補充需求備註", 80, bathY + 25);
+
+            ctx.font = "17px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#242c27";
+            let lineY = bathY + 60;
+            for (let i = 0; i < needs.length; i += maxChars) {
+                ctx.fillText(needs.substring(i, i + maxChars), 100, lineY);
+                lineY += 28;
+            }
+
+            // 底部提示條
+            ctx.fillStyle = "#9a7b52";
+            ctx.fillRect(40, 1100, canvas.width - 80, 50);
 
             ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 18px 'Noto Serif TC', serif";
+            ctx.font = "bold 17px 'Noto Serif TC', serif";
             ctx.textAlign = "center";
-            ctx.fillText("請將此頁截圖傳送至一森官方 LINE，將有專屬設計師為您服務", canvas.width / 2, 982);
+            ctx.fillText("請將此頁截圖傳送至一森官方 LINE，將有專屬設計師為您服務", canvas.width / 2, 1132);
 
+            // 輸出圖片
             const dataURL = canvas.toDataURL('image/png');
             document.getElementById('generatedImage').src = dataURL;
 
