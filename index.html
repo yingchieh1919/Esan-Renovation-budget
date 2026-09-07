@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>室內裝潢預算線上估算器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator-card">
+        <h2>室內裝潢預算線上估算器</h2>
+        <p class="subtitle">輸入您的房屋資訊，快速預估基本裝潢預算</p>
+        
+        <div class="form-group">
+            <label for="ping">室內坪數（不含陽台）：</label>
+            <input type="number" id="ping" placeholder="請輸入坪數" min="1" value="20">
+        </div>
+
+        <div class="form-group">
+            <label for="houseType">屋齡與屋況：</label>
+            <select id="houseType">
+                <option value="80000">新成屋 / 預售屋（約 6~10 萬/坪）</option>
+                <option value="120000">中古屋 / 老屋翻新（約 10~15 萬/坪）</option>
+                <option value="50000">微裝修 / 軟裝設計（約 4~6 萬/坪）</option>
+            </select>
+        </div>
+
+        <button onclick="calculateBudget()">開始計算預算</button>
+
+        <div class="result" id="resultBox" style="display: none;">
+            <h3>估算總預算範圍</h3>
+            <p class="total-price" id="totalPrice">$0</p>
+            <div class="detail-list">
+                <p>內部預估分配比例：</p>
+                <ul>
+                    <li>硬裝施工（約 60%）：<span id="hardBuild">$0</span></li>
+                    <li>家電與傢俱（約 30%）：<span id="furniture">$0</span></li>
+                    <li>軟裝與監工（約 10%）：<span id="decor">$0</span></li>
+                </ul>
+            </div>
+            <p class="note">※ 此估算僅供參考，實際費用依現場丈量與選用建材為準。</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
