@@ -6,304 +6,367 @@
     <title>一森室內設計 ESAN | 理想生活提案指南</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1f2722;
-            --card-bg: #faf8f5;
+            --bg-dark: #1b241e;
+            --card-bg: #fcfbf9;
             --gold-primary: #c5a880;
+            --gold-light: #e8dcc8;
             --gold-dark: #9a7b52;
-            --gold-light: #f2ebd9;
-            --text-dark: #2c3530;
-            --text-muted: #727e77;
-            --border-color: #e5e0d8;
+            --gold-glow: rgba(197, 168, 128, 0.15);
+            --text-main: #242c27;
+            --text-sub: #66726a;
+            --border-light: #e8e4dc;
             --line-green: #06c755;
         }
 
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
         body {
-            font-family: 'Noto Serif TC', -apple-system, BlinkMacSystemFont, serif;
-            background-color: var(--bg-color);
-            background-image: radial-gradient(#2d3a33 1px, transparent 1px);
-            background-size: 28px 28px;
+            font-family: 'Noto Serif TC', serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(197, 168, 128, 0.08) 0%, transparent 70%),
+                radial-gradient(#2a362d 1px, transparent 1px);
+            background-size: 100% 100%, 32px 32px;
             margin: 0;
-            padding: 50px 20px;
+            padding: 60px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            box-sizing: border-box;
-            color: var(--text-dark);
+            color: var(--text-main);
         }
 
-        .calculator-card {
+        .container {
             background: var(--card-bg);
-            padding: 42px 36px;
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            max-width: 500px;
+            padding: 48px 40px;
+            border-radius: 24px;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.45),
+                0 0 0 1px rgba(197, 168, 128, 0.2);
+            max-width: 540px;
             width: 100%;
-            border: 1px solid rgba(197, 168, 128, 0.25);
             position: relative;
+            overflow: hidden;
+        }
+
+        /* 頂部光暈飾條 */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
         }
 
         .brand-header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .brand-logo-img {
-            max-width: 110px;
+            max-width: 125px;
             height: auto;
             margin: 0 auto;
             display: block;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.06));
         }
 
         .page-title {
-            font-size: 1.35rem;
-            color: var(--text-dark);
+            font-size: 1.45rem;
+            color: var(--text-main);
             text-align: center;
-            margin: 20px 0 8px 0;
+            margin: 22px 0 8px 0;
             font-weight: 600;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.12em;
         }
 
         .page-subtitle {
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-sub);
             text-align: center;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            margin-bottom: 34px;
+            line-height: 1.7;
             font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .section-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--gold-primary);
+            border-radius: 50%;
         }
 
         .form-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.88rem;
-            letter-spacing: 0.03em;
+            margin-bottom: 28px;
         }
 
         input[type="number"], select {
             width: 100%;
-            padding: 14px 18px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-size: 0.92rem;
-            color: var(--text-dark);
+            padding: 15px 20px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--text-main);
             background-color: #ffffff;
             transition: all 0.3s ease;
             font-family: inherit;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
         input[type="number"]:focus, select:focus {
             outline: none;
             border-color: var(--gold-primary);
-            box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.2);
+            box-shadow: 0 0 0 4px var(--gold-glow);
         }
 
-        /* 探索生活風格卡片 */
-        .quiz-card {
-            background: linear-gradient(145deg, #f3efe6, #faf8f5);
-            border: 1px solid rgba(197, 168, 128, 0.3);
-            border-radius: 12px;
-            padding: 22px;
-            margin-bottom: 28px;
+        /* 互動式風格卡片選擇器 */
+        .style-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 32px;
         }
 
-        .quiz-card-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--gold-dark);
-            margin-bottom: 14px;
-            letter-spacing: 0.05em;
-        }
-
-        .quiz-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            line-height: 1.5;
-            color: var(--text-dark);
-            transition: color 0.2s;
-        }
-
-        .quiz-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .quiz-item input {
-            margin-top: 3px;
-            margin-right: 10px;
-            accent-color: var(--gold-dark);
-        }
-
-        button {
-            width: 100%;
+        .style-card {
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
             padding: 16px;
-            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .style-card:hover {
+            border-color: var(--gold-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+        }
+
+        .style-card.active {
+            border-color: var(--gold-primary);
+            background: linear-gradient(145deg, #ffffff, var(--gold-glow));
+            box-shadow: 0 0 0 1px var(--gold-primary), 0 8px 20px var(--gold-glow);
+        }
+
+        .style-card-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .style-card-desc {
+            font-size: 0.76rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        /* 隱藏原生 Radio */
+        .style-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 主按鈕特效 */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #d4b892, #9a7b52);
             color: #ffffff;
             border: none;
-            border-radius: 10px;
-            font-size: 0.98rem;
+            border-radius: 12px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            letter-spacing: 0.15em;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(168, 137, 94, 0.25);
+            letter-spacing: 0.18em;
+            transition: all 0.35s ease;
+            box-shadow: 0 10px 28px rgba(154, 123, 82, 0.3);
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
         }
 
-        button:hover {
-            opacity: 0.95;
-            box-shadow: 0 10px 24px rgba(168, 137, 94, 0.35);
-            transform: translateY(-1px);
+        .submit-btn:hover {
+            box-shadow: 0 12px 32px rgba(154, 123, 82, 0.45);
+            transform: translateY(-2px);
         }
 
-        button:active {
+        .submit-btn:active {
             transform: translateY(0);
         }
 
-        /* 結果與生活提案區域 */
-        .result {
-            margin-top: 30px;
-            padding-top: 26px;
-            border-top: 1px stroke var(--border-color);
-            animation: fadeIn 0.5s ease-out;
+        /* 結果展示區 */
+        .result-panel {
+            margin-top: 36px;
+            padding-top: 30px;
+            border-top: 1px dashed var(--border-light);
+            display: none;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
         .result-title {
-            margin: 0;
-            color: var(--text-muted);
+            color: var(--text-sub);
             font-size: 0.82rem;
-            font-weight: 400;
             letter-spacing: 0.05em;
         }
 
-        .style-tag {
-            display: inline-block;
+        .style-badge {
             background-color: var(--gold-light);
             color: var(--gold-dark);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             padding: 4px 12px;
             border-radius: 20px;
-            margin-top: 6px;
             font-weight: 600;
-            letter-spacing: 0.03em;
         }
 
         .total-price {
-            font-size: 1.8rem;
+            font-size: 2.1rem;
             color: var(--gold-dark);
             font-weight: 700;
-            margin: 10px 0 18px 0;
+            margin-bottom: 22px;
             letter-spacing: 0.02em;
+        }
+
+        .detail-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+        }
+
+        .detail-card-title {
+            margin: 0 0 14px 0;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            letter-spacing: 0.04em;
         }
 
         .detail-list {
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 18px 20px;
-            border-radius: 12px;
-            font-size: 0.86rem;
-            color: var(--text-dark);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-        }
-
-        .detail-list p {
-            margin: 0 0 10px 0;
-            font-weight: 600;
-            color: var(--text-dark);
-            letter-spacing: 0.02em;
-        }
-
-        .detail-list ul {
-            padding-left: 18px;
+            list-style: none;
+            padding: 0;
             margin: 0;
-            line-height: 1.9;
-            color: var(--text-muted);
         }
 
-        .detail-list li span {
-            color: var(--text-dark);
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            color: var(--text-sub);
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item span.val {
+            color: var(--text-main);
             font-weight: 600;
         }
 
         .note {
             font-size: 0.76rem;
-            color: var(--text-muted);
-            margin-top: 18px;
+            color: var(--text-sub);
+            margin-top: 20px;
             margin-bottom: 0;
             line-height: 1.6;
             font-weight: 300;
         }
 
+        /* LINE 專屬對話按鈕 */
         .line-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             background-color: var(--line-green);
             color: #ffffff;
             text-decoration: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 0.92rem;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-top: 22px;
+            margin-top: 24px;
             transition: all 0.3s ease;
-            box-shadow: 0 6px 16px rgba(6, 199, 85, 0.2);
-            letter-spacing: 0.05em;
+            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.22);
+            letter-spacing: 0.06em;
         }
 
         .line-btn:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.3);
+            opacity: 0.94;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(6, 199, 85, 0.32);
         }
 
         .line-icon {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: currentColor;
         }
     </style>
 </head>
 <body>
 
-    <div class="calculator-card">
+    <div class="container">
         <!-- 品牌標誌 -->
         <div class="brand-header">
             <img src="logo.PNG" alt="一森室內設計" class="brand-logo-img">
         </div>
 
         <div class="page-title">理想生活提案指南</div>
-        <p class="page-subtitle">探索空間的溫度，為您描繪家的輪廓</p>
+        <p class="page-subtitle">探索空間的溫度，為您描繪專屬的居住美學</p>
         
-        <!-- 空間條件 -->
+        <!-- 1. 空間條件 -->
         <div class="form-group">
-            <label for="ping">室內實用坪數：</label>
+            <div class="section-label">室內實用坪數</div>
             <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
         </div>
 
-        <!-- 房屋狀態 -->
+        <!-- 2. 空間現況 -->
         <div class="form-group">
-            <label for="houseType">空間現況與規劃方向：</label>
+            <div class="section-label">空間現況與規劃方向</div>
             <select id="houseType">
                 <option value="new">新成屋全域規劃（約 100 萬起）</option>
                 <option value="old">經典老屋煥新重構（約 200 萬起）</option>
@@ -311,49 +374,64 @@
             </select>
         </div>
 
-        <!-- 探索生活風格 -->
-        <div class="quiz-card">
-            <div class="quiz-card-title">✦ 探索您嚮往的生活光芒</div>
-            
-            <label class="quiz-item">
+        <!-- 3. 風格卡片選擇器 -->
+        <div class="section-label">嚮往的生活氛圍</div>
+        <div class="style-grid">
+            <label class="style-card active" onclick="selectStyle(this)">
                 <input type="radio" name="styleChoice" value="minimal" checked>
-                <div><b>簡約留白</b>：純粹流暢的線條，留給日常更多採光與呼吸感</div>
+                <div class="style-card-title">簡約留白</div>
+                <div class="style-card-desc">流暢線條與純粹採光，還給生活更多呼吸感</div>
             </label>
-            
-            <label class="quiz-item">
+
+            <label class="style-card" onclick="selectStyle(this)">
                 <input type="radio" name="styleChoice" value="wabi">
-                <div><b>自然木質與寂靜</b>：溫潤木紋與手感塗料，堆疊沉靜療癒的家 (+15%)</div>
+                <div class="style-card-title">自然寂靜</div>
+                <div class="style-card-desc">溫潤木質與手感塗料，堆疊靜謐療癒感 (+15%)</div>
             </label>
-            
-            <label class="quiz-item">
+
+            <label class="style-card" onclick="selectStyle(this)">
                 <input type="radio" name="styleChoice" value="luxury">
-                <div><b>飯店級輕奢美學</b>：精緻線板與金屬石材細節，優雅從容 (+30%)</div>
+                <div class="style-card-title">飯店級輕奢</div>
+                <div class="style-card-desc">精緻線板與金屬石材，流露優雅從容 (+30%)</div>
             </label>
-            
-            <label class="quiz-item">
+
+            <label class="style-card" onclick="selectStyle(this)">
                 <input type="radio" name="styleChoice" value="custom">
-                <div><b>尊爵訂製邸宅</b>：獨特工藝與頂級選材，展現獨一無二的生活品味 (+50%)</div>
+                <div class="style-card-title">尊爵訂製邸宅</div>
+                <div class="style-card-desc">特殊材質工藝與頂級建材，彰顯非凡品味 (+50%)</div>
             </label>
         </div>
 
-        <button onclick="calculateBudget()">探索專屬空間提案</button>
+        <button class="submit-btn" onclick="calculateBudget()">探索專屬空間提案</button>
 
         <!-- 試算結果與生活提案 -->
-        <div class="result" id="resultBox" style="display: none;">
-            <div class="result-title">理想空間整體規劃資源預估</div>
-            <div id="styleTag" class="style-tag">匹配氛圍：簡約留白</div>
-            <div class="total-price" id="totalPrice">$0</div>
-            
-            <div class="detail-list">
-                <p>建議整體配置比重：</p>
-                <ul>
-                    <li>基礎工程與木作美學：<span id="hardBuild">$0</span>（約 60%）</li>
-                    <li>品質家電與傢俱選品：<span id="furniture">$0</span>（約 30%）</li>
-                    <li>風格美學與工程監督：<span id="decor">$0</span>（約 10%）</li>
-                </ul>
+        <div class="result-panel" id="resultBox">
+            <div class="result-header">
+                <span class="result-title">理想空間整體規劃預估</span>
+                <span id="styleBadge" class="style-badge">簡約留白</span>
             </div>
             
-            <p class="note">※ 溫馨提醒：此提案為初步概念估算，實際內容將依現場丈量結果、設計細節及選用建材客製化調整。</p>
+            <div class="total-price" id="totalPrice">$0</div>
+            
+            <div class="detail-card">
+                <div class="detail-card-title">建議資源配置比重</div>
+                <div class="detail-list">
+                    <div class="detail-item">
+                        <span>基礎工程與木作美學 (60%)</span>
+                        <span class="val" id="hardBuild">$0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>品質家電與傢俱選品 (30%)</span>
+                        <span class="val" id="furniture">$0</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>風格美學與工程監督 (10%)</span>
+                        <span class="val" id="decor">$0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="note">※ 溫馨提醒：此提案為初步概念估算，實際細節將依現場丈量結果與選用建材客製化調整。</p>
             
             <!-- LINE 官方帳號連結 -->
             <a href="https://lin.ee/rMxsLCa" target="_blank" class="line-btn">
@@ -366,13 +444,21 @@
     </div>
 
     <script>
+        // 切換風格卡片外觀
+        function selectStyle(element) {
+            document.querySelectorAll('.style-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            element.querySelector('input[type="radio"]').checked = true;
+        }
+
+        // 計算邏輯
         function calculateBudget() {
             const pingInput = document.getElementById('ping').value;
             const ping = parseFloat(pingInput);
             const houseType = document.getElementById('houseType').value;
 
             if (!ping || ping <= 0) {
-                alert("請輸入正確的坪數！");
+                alert("請輸入正確的室內坪數！");
                 return;
             }
 
@@ -382,10 +468,10 @@
 
             if (selectedStyle === 'wabi') {
                 styleMultiplier = 1.15;
-                styleText = "自然木質與寂靜";
+                styleText = "自然寂靜";
             } else if (selectedStyle === 'luxury') {
                 styleMultiplier = 1.30;
-                styleText = "飯店級輕奢美學";
+                styleText = "飯店級輕奢";
             } else if (selectedStyle === 'custom') {
                 styleMultiplier = 1.50;
                 styleText = "尊爵訂製邸宅";
@@ -412,13 +498,17 @@
             const furniture = Math.round(totalEstimate * 0.3);
             const decor = Math.round(totalEstimate * 0.1);
 
-            document.getElementById('styleTag').innerText = `匹配氛圍：${styleText}`;
-            document.getElementById('totalPrice').innerText = `預估約 $${totalEstimate.toLocaleString()} 元起`;
+            document.getElementById('styleBadge').innerText = styleText;
+            document.getElementById('totalPrice').innerText = `約 $${totalEstimate.toLocaleString()} 元起`;
             document.getElementById('hardBuild').innerText = `$${hardBuild.toLocaleString()} 元`;
             document.getElementById('furniture').innerText = `$${furniture.toLocaleString()} 元`;
             document.getElementById('decor').innerText = `$${decor.toLocaleString()} 元`;
 
-            document.getElementById('resultBox').style.display = 'block';
+            const resultBox = document.getElementById('resultBox');
+            resultBox.style.display = 'block';
+            
+            // 自動平滑滾動至結果頁
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
 </body>
