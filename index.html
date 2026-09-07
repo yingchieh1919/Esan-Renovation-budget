@@ -148,7 +148,6 @@
             box-shadow: 0 0 0 4px var(--gold-glow);
         }
 
-        /* 風格選擇卡片 */
         .style-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -211,7 +210,7 @@
 
         .submit-btn:hover { opacity: 0.95; transform: translateY(-1px); }
 
-        /* 圖檔預覽區 */
+        /* 結果預覽區 */
         .result-panel {
             margin-top: 30px;
             padding-top: 24px;
@@ -231,6 +230,7 @@
             font-size: 0.8rem;
             color: var(--text-sub);
             margin-bottom: 18px;
+            line-height: 1.5;
         }
 
         #generatedImage {
@@ -262,7 +262,6 @@
 
         .line-icon { width: 20px; height: 20px; fill: currentColor; }
 
-        /* 隱藏畫布 Canvas */
         #cardCanvas { display: none; }
     </style>
 </head>
@@ -274,7 +273,7 @@
         </div>
 
         <div class="page-title">理想生活規劃諮詢</div>
-        <p class="page-subtitle">請填寫您的基本資訊與預算，系統將自動生成專屬諮詢圖檔</p>
+        <p class="page-subtitle">請填寫您的基本資訊與預算，系統將自動生成專屬諮詢卡</p>
         
         <!-- 1. 客戶個人資訊 -->
         <div class="section-label">基本聯絡資訊</div>
@@ -338,12 +337,12 @@
             <textarea id="custNeeds" placeholder="例如：希望增加主臥收納、客廳要能擺放65吋電視、浴室乾濕分離..."></textarea>
         </div>
 
-        <button class="submit-btn" onclick="generateImageCard()">一鍵生成專屬諮詢卡圖檔</button>
+        <button class="submit-btn" onclick="generateImageCard()">生成專屬諮詢卡</button>
 
         <!-- 圖檔生成結論與預覽 -->
         <div class="result-panel" id="resultBox">
             <div class="preview-title">您的專屬需求諮詢卡已生成</div>
-            <p class="preview-desc">請長按或點擊儲存上方圖檔，並將圖檔傳送至 LINE，專屬設計師將主動與您聯繫！</p>
+            <p class="preview-desc">請將下方圖片<b>【截圖】</b>後，點擊按鈕開啟 LINE 發送給我們，設計師將盡快與您聯繫！</p>
             
             <img id="generatedImage" src="" alt="一森專屬諮詢卡">
 
@@ -351,12 +350,11 @@
                 <svg class="line-icon" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 5.82 2 10.53c0 4.23 3.61 7.78 8.48 8.42.33.07.78.22.89.51.1.26.07.67.03.94l-.14.86c-.04.26-.2.1.03 1.18.23.23 1.25.75 2.06.32 2.74-1.61 7.65-4.5 7.65-11.23C22 5.82 17.52 2 12 2z"/>
                 </svg>
-                傳送圖檔至一森官方 LINE
+                截圖回傳至官方 Line
             </a>
         </div>
     </div>
 
-    <!-- 用於繪製圖檔的隱藏 Canvas -->
     <canvas id="cardCanvas" width="800" height="1050"></canvas>
 
     <script>
@@ -381,15 +379,12 @@
                 return;
             }
 
-            // 開始繪製 Canvas
             const canvas = document.getElementById('cardCanvas');
             const ctx = canvas.getContext('2d');
 
-            // 1. 背景底色
             ctx.fillStyle = "#faf8f5";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 2. 奢華外框與邊角
             ctx.strokeStyle = "#c5a880";
             ctx.lineWidth = 6;
             ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
@@ -398,7 +393,6 @@
             ctx.lineWidth = 1;
             ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
 
-            // 3. 標題與品牌
             ctx.fillStyle = "#9a7b52";
             ctx.font = "bold 32px 'Noto Serif TC', serif";
             ctx.textAlign = "center";
@@ -408,14 +402,12 @@
             ctx.font = "bold 26px 'Noto Serif TC', serif";
             ctx.fillText("理想生活 ｜ 專屬裝修需求諮詢卡", canvas.width / 2, 145);
 
-            // 分割線
             ctx.beginPath();
             ctx.moveTo(80, 175);
             ctx.lineTo(canvas.width - 80, 175);
             ctx.strokeStyle = "#e8e4dc";
             ctx.stroke();
 
-            // 4. 客戶基本資訊區塊
             ctx.textAlign = "left";
             ctx.font = "bold 22px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
@@ -428,7 +420,6 @@
             ctx.fillText(`建案/地址：${project}`, 100, 345);
             ctx.fillText(`方便聯絡：${time}`, 100, 385);
 
-            // 5. 裝修條件與預算
             ctx.font = "bold 22px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
             ctx.fillText("✦ 空間規劃與預算方向", 80, 445);
@@ -439,7 +430,6 @@
             ctx.fillText(`房屋現況：${houseType}`, 100, 530);
             ctx.fillText(`嚮往風格：${style}`, 100, 570);
 
-            // 6. 系統預估建議與結論
             ctx.font = "bold 22px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
             ctx.fillText("✦ 系統初步分析建議", 80, 630);
@@ -451,7 +441,6 @@
             ctx.fillText(advice1, 100, 675);
             ctx.fillText(advice2, 100, 710);
 
-            // 7. 簡述需求
             ctx.font = "bold 22px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
             ctx.fillText("✦ 簡述需求與重點", 80, 770);
@@ -459,7 +448,6 @@
             ctx.font = "18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
             
-            // 自動換行處理需求文字
             const maxCharPerLine = 32;
             let lineY = 810;
             for (let i = 0; i < needs.length; i += maxCharPerLine) {
@@ -467,16 +455,14 @@
                 lineY += 30;
             }
 
-            // 8. 頁腳引導
             ctx.fillStyle = "#9a7b52";
             ctx.fillRect(40, 950, canvas.width - 80, 50);
 
             ctx.fillStyle = "#ffffff";
             ctx.font = "bold 18px 'Noto Serif TC', serif";
             ctx.textAlign = "center";
-            ctx.fillText("請將此諮詢卡傳送至一森官方 LINE，將有專屬設計師為您服務", canvas.width / 2, 982);
+            ctx.fillText("請將此頁截圖傳送至一森官方 LINE，將有專屬設計師為您服務", canvas.width / 2, 982);
 
-            // 轉成 Base64 圖片並顯示
             const dataURL = canvas.toDataURL('image/png');
             document.getElementById('generatedImage').src = dataURL;
 
