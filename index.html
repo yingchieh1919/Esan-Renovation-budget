@@ -50,8 +50,9 @@
             margin-bottom: 20px;
         }
 
+        /* 直接載入您上傳的 Logo 圖片 */
         .brand-logo-img {
-            max-width: 140px;
+            max-width: 140px; /* 控制 Logo 寬度，若太小可改為 160px 或 180px */
             height: auto;
             margin: 0 auto;
             display: block;
@@ -219,7 +220,6 @@
 <body>
 
     <div class="calculator-card">
-        <!-- 品牌 Logo 區域 -->
         <div class="brand-header">
             <img src="logo.png" alt="一森室內設計 ESAN INTERIOR DESIGN" class="brand-logo-img">
         </div>
@@ -227,7 +227,6 @@
         <div class="page-title">尊爵裝潢預算估算器</div>
         <p class="page-subtitle">為您專屬訂製的一森極致空間</p>
         
-        <!-- 輸入表單 -->
         <div class="form-group">
             <label for="ping">室內坪數（不含陽台與公設）：</label>
             <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
@@ -236,15 +235,14 @@
         <div class="form-group">
             <label for="houseType">屋齡與工程類型：</label>
             <select id="houseType">
-                <option value="new">一森尊爵新成屋（100 萬起跳）</option>
-                <option value="old">一森極致老屋翻新（200 萬起跳）</option>
-                <option value="soft">微裝修 / 軟裝設計（60 萬起跳）</option>
+                <option value="150000">一森尊爵新成屋（約 12~18 萬/坪）</option>
+                <option value="210000">一森極致老屋翻新（約 18~25 萬/坪）</option>
+                <option value="80000">微裝修 / 軟裝設計（約 6~10 萬/坪）</option>
             </select>
         </div>
 
         <button onclick="calculateBudget()">開始您的專屬預算試算</button>
 
-        <!-- 結果展示區 -->
         <div class="result" id="resultBox" style="display: none;">
             <div class="result-title">預估總費用範圍</div>
             <div class="total-price" id="totalPrice">$0</div>
@@ -260,7 +258,6 @@
             
             <p class="note">※ 備註：此結果為基礎估算，實際費用仍需依現場丈量結果、設計細節及指定建材為準。</p>
             
-            <!-- 預約諮詢按鈕 -->
             <a href="https://line.me" target="_blank" class="contact-btn">預約一森設計師現場丈量</a>
         </div>
     </div>
@@ -269,32 +266,14 @@
         function calculateBudget() {
             const pingInput = document.getElementById('ping').value;
             const ping = parseFloat(pingInput);
-            const houseType = document.getElementById('houseType').value;
+            const costPerPing = parseFloat(document.getElementById('houseType').value);
 
             if (!ping || ping <= 0) {
                 alert("請輸入正確的坪數！");
                 return;
             }
 
-            let baseCost = 0;
-            let costPerPing = 0;
-
-            // 根據工程類型設定門檻起跳價與單坪加價金額
-            if (houseType === 'new') {
-                baseCost = 1000000;   // 100萬起跳
-                costPerPing = 60000;  // 每坪增加約6萬
-            } else if (houseType === 'old') {
-                baseCost = 2000000;   // 200萬起跳
-                costPerPing = 90000;  // 每坪增加約9萬
-            } else if (houseType === 'soft') {
-                baseCost = 600000;    // 60萬起跳
-                costPerPing = 30000;  // 每坪增加約3萬
-            }
-
-            // 計算總金額（起跳價 + 坪數變動估算）
-            const totalEstimate = baseCost + (ping * costPerPing);
-            
-            // 比例分攤
+            const totalEstimate = ping * costPerPing;
             const hardBuild = Math.round(totalEstimate * 0.6);
             const furniture = Math.round(totalEstimate * 0.3);
             const decor = Math.round(totalEstimate * 0.1);
