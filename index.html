@@ -13,7 +13,6 @@
             --card-bg: #faf9f6;
             --gold-primary: #c5a880;
             --gold-dark: #a8895e;
-            --gold-light: #e6d3b8;
             --text-dark: #1f2722;
             --text-muted: #5e6b63;
             --border-color: #e2ded7;
@@ -45,37 +44,18 @@
             position: relative;
         }
 
-        /* 品牌的 Logo SVG 圖示與文字 */
+        /* 品牌 Logo 區域 */
         .brand-header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
-        /* 調整 Logo 尺寸，使其更精緻小巧 */
-        .brand-logo-svg {
-            width: 42px;
+        /* 直接載入您上傳的 Logo 圖片 */
+        .brand-logo-img {
+            max-width: 140px; /* 控制 Logo 寬度，若太小可改為 160px 或 180px */
             height: auto;
-            margin: 0 auto 10px auto;
+            margin: 0 auto;
             display: block;
-        }
-
-        .brand-title {
-            font-size: 1.25rem;
-            letter-spacing: 0.2em;
-            color: var(--gold-dark);
-            font-weight: 700;
-            margin: 0;
-            text-indent: 0.2em;
-        }
-
-        .brand-subtitle {
-            font-size: 0.7rem;
-            letter-spacing: 0.25em;
-            color: var(--gold-primary);
-            margin-top: 4px;
-            font-weight: 400;
-            text-transform: uppercase;
-            text-indent: 0.25em;
         }
 
         .page-title {
@@ -240,27 +220,13 @@
 <body>
 
     <div class="calculator-card">
-        <!-- 品牌標誌與抬頭 -->
         <div class="brand-header">
-            <svg class="brand-logo-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- 正確的一森幾何造型 Logo -->
-                <path d="M48 5 L55 5 L43 52 L82 52 L18 115 L36 62 L12 62 Z" fill="url(#goldGradient)"/>
-                <defs>
-                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#E6D3B8"/>
-                        <stop offset="50%" stop-color="#C5A880"/>
-                        <stop offset="100%" stop-color="#A8895E"/>
-                    </linearGradient>
-                </defs>
-            </svg>
-            <div class="brand-title">一森室內設計</div>
-            <div class="brand-subtitle">ESAN INTERIOR DESIGN</div>
+            <img src="logo.png" alt="一森室內設計 ESAN INTERIOR DESIGN" class="brand-logo-img">
         </div>
 
         <div class="page-title">尊爵裝潢預算估算器</div>
         <p class="page-subtitle">為您專屬訂製的一森極致空間</p>
         
-        <!-- 輸入表單 -->
         <div class="form-group">
             <label for="ping">室內坪數（不含陽台與公設）：</label>
             <input type="number" id="ping" placeholder="請輸入坪數（例：25）" min="1" value="20">
@@ -277,7 +243,6 @@
 
         <button onclick="calculateBudget()">開始您的專屬預算試算</button>
 
-        <!-- 結果展示區 -->
         <div class="result" id="resultBox" style="display: none;">
             <div class="result-title">預估總費用範圍</div>
             <div class="total-price" id="totalPrice">$0</div>
@@ -293,7 +258,6 @@
             
             <p class="note">※ 備註：此結果為基礎估算，實際費用仍需依現場丈量結果、設計細節及指定建材為準。</p>
             
-            <!-- 預約諮詢按鈕 -->
             <a href="https://line.me" target="_blank" class="contact-btn">預約一森設計師現場丈量</a>
         </div>
     </div>
