@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 載入 QR Code 生成庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --bg-dark: #1b241e;
@@ -49,7 +51,7 @@
             box-shadow: 
                 0 30px 80px rgba(0, 0, 0, 0.45),
                 0 0 0 1px rgba(197, 168, 128, 0.2);
-            max-width: 560px;
+            max-width: 600px;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -148,6 +150,42 @@
             box-shadow: 0 0 0 4px var(--gold-glow);
         }
 
+        /* 預算滑軌視覺 */
+        .budget-container {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .budget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .budget-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold-dark);
+        }
+
+        .budget-hint {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            margin-top: 6px;
+            text-align: right;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--gold-primary);
+            cursor: pointer;
+        }
+
+        /* 風格圖卡 */
         .style-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -158,11 +196,20 @@
         .style-card {
             border: 1px solid var(--border-light);
             border-radius: 12px;
-            padding: 12px;
+            padding: 10px;
             background: #ffffff;
             cursor: pointer;
             transition: all 0.25s ease;
             position: relative;
+            overflow: hidden;
+        }
+
+        .style-card-img {
+            width: 100%;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
         }
 
         .style-card:hover { border-color: var(--gold-primary); }
@@ -170,18 +217,18 @@
         .style-card.active {
             border-color: var(--gold-primary);
             background: linear-gradient(145deg, #ffffff, var(--gold-glow));
-            box-shadow: 0 0 0 1px var(--gold-primary);
+            box-shadow: 0 0 0 2px var(--gold-primary);
         }
 
         .style-card-title {
             font-weight: 600;
             font-size: 0.85rem;
             color: var(--text-main);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .style-card-desc {
-            font-size: 0.73rem;
+            font-size: 0.72rem;
             color: var(--text-sub);
             line-height: 1.3;
         }
@@ -240,28 +287,45 @@
             margin-bottom: 20px;
         }
 
-        .line-btn {
+        .action-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .line-btn, .download-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            background-color: var(--line-green);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 15px;
+            gap: 8px;
+            padding: 14px;
             border-radius: 12px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.22);
-            letter-spacing: 0.05em;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
         }
 
-        .line-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .line-btn {
+            background-color: var(--line-green);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.22);
+        }
 
-        .line-icon { width: 20px; height: 20px; fill: currentColor; }
+        .download-btn {
+            background-color: #ffffff;
+            color: var(--text-main);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
 
-        #cardCanvas { display: none; }
+        .line-btn:hover, .download-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .line-icon { width: 18px; height: 18px; fill: currentColor; }
+
+        #cardCanvas, #qrcodeHidden { display: none; }
     </style>
 </head>
 <body>
@@ -272,105 +336,165 @@
         </div>
 
         <div class="page-title">理想生活規劃諮詢</div>
-        <p class="page-subtitle">請填寫您的基本資訊與預算，系統將自動生成詳細分析諮詢卡</p>
+        <p class="page-subtitle">請填寫您的基本資訊與需求，系統將動態評估生成專屬諮詢卡</p>
         
         <!-- 1. 客戶個人資訊 -->
         <div class="section-label">基本聯絡資訊</div>
         <div class="form-group form-row">
-            <input type="text" id="custName" placeholder="您的姓名 / 稱呼" required>
-            <input type="text" id="custPhone" placeholder="聯絡電話" required>
+            <input type="text" id="custName" placeholder="您的姓名 / 稱呼 *" required>
+            <input type="text" id="custPhone" placeholder="聯絡電話 *" required>
         </div>
 
         <div class="form-group form-row">
             <input type="text" id="custProject" placeholder="建案名稱或地址">
             <select id="custTime">
-                <option value="隨時皆可">方便聯絡時間：隨時皆可</option>
+                <option value="隨時皆可">方便聯絡：隨時皆可</option>
                 <option value="平日白天 (09:00 - 18:00)">平日白天 (09:00 - 18:00)</option>
                 <option value="平日晚上 (18:00 - 21:00)">平日晚上 (18:00 - 21:00)</option>
                 <option value="假日/週末">假日 / 週末</option>
             </select>
         </div>
 
-        <!-- 2. 預算與屋況 -->
-        <div class="section-label">預算與房屋現況</div>
+        <!-- 2. 空間與預算 -->
+        <div class="section-label">空間與預算規劃</div>
         <div class="form-group form-row">
-            <input type="number" id="budgetInput" placeholder="預算金額（萬元）" min="30" value="100">
             <select id="houseType">
                 <option value="新成屋">新成屋全域規劃</option>
                 <option value="老屋翻新">老屋翻新重構</option>
                 <option value="微裝修/軟裝">微裝修 / 局部軟裝</option>
             </select>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="number" id="spaceSize" placeholder="室內坪數" min="5" value="25">
+                <span style="font-size: 0.85rem; color: var(--text-sub); white-space: nowrap;">坪</span>
+            </div>
         </div>
 
-        <!-- 3. 風格選擇卡片 -->
+        <!-- 滑軌預算 -->
+        <div class="budget-container">
+            <div class="budget-header">
+                <span style="font-size: 0.85rem; font-weight: 600;">整體規劃預算</span>
+                <span class="budget-value" id="budgetValueDisplay">120 萬元</span>
+            </div>
+            <input type="range" id="budgetRange" min="30" max="500" step="10" value="120" oninput="updateBudgetDisplay(this.value)">
+            <div class="budget-hint" id="budgetHintDisplay">每坪約 4.8 萬 ｜ 適合新成屋基礎與精緻系統櫃</div>
+        </div>
+
+        <!-- 3. 風格選擇卡片（含圖片） -->
         <div class="section-label">嚮往的生活風格</div>
         <div class="style-grid">
             <label class="style-card active" onclick="selectStyle(this)">
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="簡約留白">
                 <input type="radio" name="styleChoice" value="簡約留白" checked>
                 <div class="style-card-title">簡約留白</div>
-                <div class="style-card-desc">極簡線條，流暢採光與呼吸感</div>
+                <div class="style-card-desc">極簡線條與流暢採光</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
+                <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="自然寂靜">
                 <input type="radio" name="styleChoice" value="自然寂靜">
                 <div class="style-card-title">自然寂靜</div>
-                <div class="style-card-desc">手感塗料與溫潤木質氛圍</div>
+                <div class="style-card-desc">手感塗料與溫潤木質</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="飯店級輕奢">
                 <input type="radio" name="styleChoice" value="飯店級輕奢">
                 <div class="style-card-title">飯店級輕奢</div>
-                <div class="style-card-desc">金屬細節、石材壁板與精緻光影</div>
+                <div class="style-card-desc">金屬細節與石材光影</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="尊爵訂製邸宅">
                 <input type="radio" name="styleChoice" value="尊爵訂製邸宅">
                 <div class="style-card-title">尊爵訂製邸宅</div>
-                <div class="style-card-desc">特殊工藝與頂級建材客製化</div>
+                <div class="style-card-desc">頂級工藝與客製化奢華</div>
             </label>
         </div>
 
         <!-- 4. 簡述需求 -->
         <div class="form-group">
             <div class="section-label">簡述裝修需求或重點</div>
-            <textarea id="custNeeds" placeholder="例如：希望增加主臥收納、客廳要能擺放65吋電視、浴室乾濕分離..."></textarea>
+            <textarea id="custNeeds" placeholder="例如：希望主臥增加衣帽間、客廳需要放 65 吋電視、浴室乾濕分離..."></textarea>
         </div>
 
-        <button class="submit-btn" onclick="generateImageCard()">生成詳細諮詢卡</button>
+        <button class="submit-btn" onclick="generateImageCard()">生成專屬詳細諮詢卡</button>
 
         <!-- 圖檔生成結論與預覽 -->
         <div class="result-panel" id="resultBox">
             <div class="preview-title">您的專屬需求諮詢卡已生成</div>
-            <p class="preview-desc">請將下方圖片<b>【截圖】</b>後，點擊按鈕開啟 LINE 發送給我們，設計師將盡快與您聯繫！</p>
+            <p class="preview-desc">請將下方圖片<b>【截圖】</b>或點擊<b>【下載圖片】</b>後，回傳至官方 LINE！</p>
             
             <img id="generatedImage" src="" alt="一森專屬諮詢卡">
 
-            <a href="https://lin.ee/rMxsLCa" target="_blank" class="line-btn">
-                <svg class="line-icon" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 5.82 2 10.53c0 4.23 3.61 7.78 8.48 8.42.33.07.78.22.89.51.1.26.07.67.03.94l-.14.86c-.04.26-.2.1.03 1.18.23.23 1.25.75 2.06.32 2.74-1.61 7.65-4.5 7.65-11.23C22 5.82 17.52 2 12 2z"/>
-                </svg>
-                截圖回傳至官方 Line
-            </a>
+            <div class="action-group">
+                <button class="download-btn" onclick="downloadImage()">💾 下載諮詢圖卡</button>
+                <a href="#" id="lineLink" target="_blank" class="line-btn">
+                    <svg class="line-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 5.82 2 10.53c0 4.23 3.61 7.78 8.48 8.42.33.07.78.22.89.51.1.26.07.67.03.94l-.14.86c-.04.26-.2.1.03 1.18.23.23 1.25.75 2.06.32 2.74-1.61 7.65-4.5 7.65-11.23C22 5.82 17.52 2 12 2z"/>
+                    </svg>
+                    截圖回傳官方 LINE
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- 畫布高度調整為 1200px 放置詳細內容 -->
-    <canvas id="cardCanvas" width="800" height="1200"></canvas>
+    <!-- 隱藏的 QR Code 生成容器與 Canvas -->
+    <div id="qrcodeHidden"></div>
+    <canvas id="cardCanvas" width="800" height="1220"></canvas>
 
     <script>
+        const lineOfficialUrl = "https://lin.ee/rMxsLCa";
+
+        // 預算滑軌動態計算
+        function updateBudgetDisplay(val) {
+            document.getElementById('budgetValueDisplay').innerText = val + " 萬元";
+            const size = parseFloat(document.getElementById('spaceSize').value) || 20;
+            const houseType = document.getElementById('houseType').value;
+            const ppx = (val / size).toFixed(1);
+            
+            let hint = `每坪約 ${ppx} 萬 ｜ `;
+            if (houseType === "老屋翻新" && ppx < 8) {
+                hint += "⚠️ 老屋基礎工程佔比高，建議稍微調升預算";
+            } else if (ppx < 4) {
+                hint += "適合局部微裝修或純系統櫃升級";
+            } else if (ppx >= 4 && ppx < 8) {
+                hint += "適合新成屋全域設計與精緻收納";
+            } else {
+                hint += "充裕預算，可進行奢華材質與結構重構";
+            }
+            document.getElementById('budgetHintDisplay').innerText = hint;
+        }
+
+        document.getElementById('spaceSize').addEventListener('input', () => {
+            updateBudgetDisplay(document.getElementById('budgetRange').value);
+        });
+        document.getElementById('houseType').addEventListener('change', () => {
+            updateBudgetDisplay(document.getElementById('budgetRange').value);
+        });
+
         function selectStyle(element) {
             document.querySelectorAll('.style-card').forEach(card => card.classList.remove('active'));
             element.classList.add('active');
             element.querySelector('input[type="radio"]').checked = true;
         }
 
+        // 初始化 QR Code 生成
+        let qrCanvas = null;
+        const qrcodeObj = new QRCode(document.getElementById("qrcodeHidden"), {
+            text: lineOfficialUrl,
+            width: 100,
+            height: 100,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
         function generateImageCard() {
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const project = document.getElementById('custProject').value.trim() || "未提供";
             const time = document.getElementById('custTime').value;
-            const budgetVal = parseFloat(document.getElementById('budgetInput').value) || 100;
             const houseType = document.getElementById('houseType').value;
+            const size = parseFloat(document.getElementById('spaceSize').value) || 20;
+            const budgetVal = parseFloat(document.getElementById('budgetRange').value);
             const style = document.querySelector('input[name="styleChoice"]:checked').value;
             const needs = document.getElementById('custNeeds').value.trim() || "無特別備註";
 
@@ -379,39 +503,43 @@
                 return;
             }
 
-            // 動態分析建議生成邏輯
-            let hardRatio = "60%", softRatio = "30%", feeRatio = "10%";
+            // 生成專屬諮詢單號與日期
+            const now = new Date();
+            const dateStr = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+            const timeStr = String(now.getHours()).padStart(2, '0') + String(now.getMinutes()).padStart(2, '0');
+            const serialNo = `ESAN-${dateStr}${timeStr}`;
+            const dateDisplay = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+
+            // 動態分析計算
+            const ppx = (budgetVal / size).toFixed(1);
             let hardAmt = Math.round(budgetVal * 0.6);
             let softAmt = Math.round(budgetVal * 0.3);
 
-            let allocAdvice = `建議配比：硬裝保護與系統櫃 (${hardRatio} 約 ${hardAmt}萬) ｜ 家具家電 (${softRatio} 約 ${softAmt}萬)`;
+            let allocAdvice = `資源建議：工程保護與系統櫃 (60%約 ${hardAmt}萬) ｜ 家具軟裝 (30%約 ${softAmt}萬)`;
             let cabinetAdvice = "";
             let bathAdvice = "";
 
-            if (budgetVal < 80) {
-                cabinetAdvice = "重點佈局：客廳懸空電視櫃、玄關鞋櫃整合；次臥建議保留彈性，先以現成家具過渡。";
-                bathAdvice = "浴室評估：翻新單價約 30 萬/間，預算有限下建議先做局部乾濕分離配件升級。";
-            } else if (budgetVal >= 80 && budgetVal < 160) {
-                cabinetAdvice = "重點佈局：客廳全座向收納電視牆、主臥頂天立地滑門/開門衣櫃、餐廚中島餐櫃整合。";
-                if (houseType === "老屋翻新") {
-                    bathAdvice = "浴室評估：老屋拆除與防水全重做（約30萬/間），需注意水電重拉佔總預算比重。";
-                } else {
-                    bathAdvice = "浴室評估：新成屋已有建商設備，建議保留原預算轉投入全屋客製化系統櫃與氛圍燈光。";
-                }
+            if (ppx < 4.5) {
+                cabinetAdvice = "重點佈局：客廳電視牆整合、玄關懸空鞋櫃；次臥建議選用現成家具彈性配置。";
+                bathAdvice = "衛浴提醒：翻新單價約 30 萬/間，預算有限下建議先做局部乾濕分離配件升級。";
+            } else if (ppx >= 4.5 && ppx < 8.5) {
+                cabinetAdvice = "重點佈局：客廳高機能全座向收納牆、主臥頂天立地衣櫃、餐廚中島餐櫃整合。";
+                bathAdvice = houseType === "老屋翻新" ? 
+                    "衛浴提醒：老屋基礎水電與防水需優先重構（約30萬/間），預算已適度預留。" : 
+                    "衛浴提醒：新成屋建商附設備可保留，預算可全數挹注於系統櫃質感與氣氛燈光的營造。";
             } else {
-                cabinetAdvice = "重點佈局：全屋客製化隱藏門系統櫃、獨立衣帽間、藝術特殊塗料主牆與精品展示燈帶。";
-                bathAdvice = "浴室評估：預算充裕支援 1~2 間浴室深度重構（每間約30萬），可升級埋壁式龍頭與進口大版磚。";
+                cabinetAdvice = "重點佈局：全屋隱藏門系統櫃、獨立奢華衣帽間、特殊手感塗料主牆與精品展示燈帶。";
+                bathAdvice = "衛浴提醒：充裕預算支援衛浴深度重構，可升級埋壁式精品龍頭與進口大版磚。";
             }
 
-            // 開始畫 Canvas
+            // Canvas 繪製
             const canvas = document.getElementById('cardCanvas');
             const ctx = canvas.getContext('2d');
 
-            // 底色
             ctx.fillStyle = "#faf8f5";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 雙層奢華外框
+            // 奢華外框
             ctx.strokeStyle = "#c5a880";
             ctx.lineWidth = 6;
             ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
@@ -420,20 +548,28 @@
             ctx.lineWidth = 1;
             ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
 
+            // 頂部諮詢單號與日期
+            ctx.font = "14px 'Noto Serif TC', serif";
+            ctx.fillStyle = "#9a7b52";
+            ctx.textAlign = "left";
+            ctx.fillText(`NO. ${serialNo}`, 60, 65);
+            ctx.textAlign = "right";
+            ctx.fillText(`諮詢日期：${dateDisplay}`, canvas.width - 60, 65);
+
             // 標題
             ctx.fillStyle = "#9a7b52";
             ctx.font = "bold 30px 'Noto Serif TC', serif";
             ctx.textAlign = "center";
-            ctx.fillText("一森室內設計 ESAN DESIGN", canvas.width / 2, 95);
+            ctx.fillText("一森室內設計 ESAN DESIGN", canvas.width / 2, 110);
 
             ctx.fillStyle = "#242c27";
-            ctx.font = "bold 24px 'Noto Serif TC', serif";
-            ctx.fillText("理想生活 ｜ 專屬裝修需求與初步分析指南", canvas.width / 2, 138);
+            ctx.font = "bold 23px 'Noto Serif TC', serif";
+            ctx.fillText("理想生活 ｜ 專屬裝修需求與初步分析指南", canvas.width / 2, 150);
 
             // 分割線
             ctx.beginPath();
-            ctx.moveTo(80, 165);
-            ctx.lineTo(canvas.width - 80, 165);
+            ctx.moveTo(80, 175);
+            ctx.lineTo(canvas.width - 80, 175);
             ctx.strokeStyle = "#e8e4dc";
             ctx.stroke();
 
@@ -441,58 +577,54 @@
             ctx.textAlign = "left";
             ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 客戶基本資訊", 80, 205);
+            ctx.fillText("✦ 客戶基本資訊", 80, 215);
 
-            ctx.font = "19px 'Noto Serif TC', serif";
+            ctx.font = "18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText(`稱　　呼：${name}`, 100, 245);
-            ctx.fillText(`聯絡電話：${phone}`, 100, 280);
-            ctx.fillText(`建案/地址：${project}`, 100, 315);
-            ctx.fillText(`方便聯絡：${time}`, 100, 350);
+            ctx.fillText(`稱　　呼：${name}`, 100, 255);
+            ctx.fillText(`聯絡電話：${phone}`, 100, 290);
+            ctx.fillText(`建案/地址：${project}`, 100, 325);
+            ctx.fillText(`方便聯絡：${time}`, 100, 360);
 
             // 2. 空間條件
             ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 空間規劃條件", 80, 405);
+            ctx.fillText("✦ 空間規劃條件", 80, 415);
 
-            ctx.font = "19px 'Noto Serif TC', serif";
+            ctx.font = "18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText(`規劃預算：約 ${budgetVal} 萬元`, 100, 445);
-            ctx.fillText(`房屋現況：${houseType}`, 100, 480);
-            ctx.fillText(`嚮往風格：${style}`, 100, 515);
+            ctx.fillText(`房屋現況：${houseType} (${size} 坪)`, 100, 455);
+            ctx.fillText(`規劃預算：${budgetVal} 萬元 (平均每坪約 ${ppx} 萬元)`, 100, 490);
+            ctx.fillText(`嚮往風格：${style}`, 100, 525);
 
             // 3. 詳細分析建議
             ctx.font = "bold 21px 'Noto Serif TC', serif";
             ctx.fillStyle = "#9a7b52";
-            ctx.fillText("✦ 專業初步分析建議 (一森團隊評估)", 80, 575);
+            ctx.fillText("✦ 專業初步分析建議 (一森團隊評估)", 80, 585);
 
-            // 建議 1: 比重分配
             ctx.font = "bold 18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText("① 資源預算分配", 100, 615);
+            ctx.fillText("① 資源預算分配", 100, 625);
             ctx.font = "17px 'Noto Serif TC', serif";
             ctx.fillStyle = "#66726a";
-            ctx.fillText(allocAdvice, 120, 645);
+            ctx.fillText(allocAdvice, 120, 655);
 
-            // 建議 2: 系統櫃佈局
             ctx.font = "bold 18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText("② 核心系統櫃與場域落點", 100, 690);
+            ctx.fillText("② 核心系統櫃與場域落點", 100, 700);
             ctx.font = "17px 'Noto Serif TC', serif";
             ctx.fillStyle = "#66726a";
             
-            // 換行繪製 cabinetAdvice
-            let cabY = 720;
             const maxChars = 34;
+            let cabY = 730;
             for (let i = 0; i < cabinetAdvice.length; i += maxChars) {
                 ctx.fillText(cabinetAdvice.substring(i, i + maxChars), 120, cabY);
                 cabY += 28;
             }
 
-            // 建議 3: 衛浴與基礎工程
             ctx.font = "bold 18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText("③ 衛浴工程與基礎建議 (基本門檻 30萬/間)", 100, cabY + 15);
+            ctx.fillText("③ 衛浴工程與基礎建議 (標準翻新門檻 30萬/間)", 100, cabY + 15);
             ctx.font = "17px 'Noto Serif TC', serif";
             ctx.fillStyle = "#66726a";
             
@@ -515,22 +647,53 @@
                 lineY += 28;
             }
 
-            // 底部提示條
+            // 底部提示條與 QR Code 繪製
             ctx.fillStyle = "#9a7b52";
-            ctx.fillRect(40, 1100, canvas.width - 80, 50);
+            ctx.fillRect(40, 1100, canvas.width - 80, 80);
 
             ctx.fillStyle = "#ffffff";
             ctx.font = "bold 17px 'Noto Serif TC', serif";
-            ctx.textAlign = "center";
-            ctx.fillText("請將此頁截圖傳送至一森官方 LINE，將有專屬設計師為您服務", canvas.width / 2, 1132);
+            ctx.textAlign = "left";
+            ctx.fillText("請將此頁【截圖】傳送至一森官方 LINE", 70, 1135);
+            ctx.font = "14px 'Noto Serif TC', serif";
+            ctx.fillText("將由專屬設計師為您提供一對一深度諮詢服務", 70, 1160);
 
-            // 輸出圖片
-            const dataURL = canvas.toDataURL('image/png');
-            document.getElementById('generatedImage').src = dataURL;
+            // 抓取生成的 QR Code 並繪製到 Canvas 右下角
+            setTimeout(() => {
+                const qrImage = document.querySelector('#qrcodeHidden img');
+                if (qrImage && qrImage.src) {
+                    const img = new Image();
+                    img.src = qrImage.src;
+                    img.onload = function() {
+                        ctx.drawImage(img, canvas.width - 125, 1110, 60, 60);
+                        finalizeOutput();
+                    };
+                } else {
+                    finalizeOutput();
+                }
+            }, 100);
 
-            const resultBox = document.getElementById('resultBox');
-            resultBox.style.display = 'block';
-            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            function finalizeOutput() {
+                const dataURL = canvas.toDataURL('image/png');
+                document.getElementById('generatedImage').src = dataURL;
+
+                // 設定 LINE 自動預設文字連結
+                const lineMsg = encodeURIComponent(`您好！我已在網站完成專屬諮詢卡（單號：${serialNo}），這是我的需求資訊，請協助評估！`);
+                document.getElementById('lineLink').href = `${lineOfficialUrl}?text=${lineMsg}`;
+
+                const resultBox = document.getElementById('resultBox');
+                resultBox.style.display = 'block';
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // 下載圖卡功能
+        function downloadImage() {
+            const canvas = document.getElementById('cardCanvas');
+            const link = document.createElement('a');
+            link.download = `一森設計_理想生活諮詢卡.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         }
     </script>
 </body>
