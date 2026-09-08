@@ -206,10 +206,11 @@
 
         .style-card-img {
             width: 100%;
-            height: 90px;
+            height: 100px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 8px;
+            background-color: #f0ece1;
         }
 
         .style-card:hover { border-color: var(--gold-primary); }
@@ -379,32 +380,32 @@
             <div class="budget-hint" id="budgetHintDisplay">每坪約 4.8 萬 ｜ 適合新成屋基礎與精緻系統櫃</div>
         </div>
 
-        <!-- 3. 風格選擇卡片（含圖片） -->
+        <!-- 3. 風格選擇卡片（讀取公司自家照片） -->
         <div class="section-label">嚮往的生活風格</div>
         <div class="style-grid">
             <label class="style-card active" onclick="selectStyle(this)">
-                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="簡約留白">
+                <img src="style-simple.jpg" class="style-card-img" alt="簡約留白">
                 <input type="radio" name="styleChoice" value="簡約留白" checked>
                 <div class="style-card-title">簡約留白</div>
                 <div class="style-card-desc">極簡線條與流暢採光</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
-                <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="自然寂靜">
+                <img src="style-wabi.jpg" class="style-card-img" alt="自然寂靜">
                 <input type="radio" name="styleChoice" value="自然寂靜">
                 <div class="style-card-title">自然寂靜</div>
                 <div class="style-card-desc">手感塗料與溫潤木質</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
-                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="飯店級輕奢">
+                <img src="style-luxury.jpg" class="style-card-img" alt="飯店級輕奢">
                 <input type="radio" name="styleChoice" value="飯店級輕奢">
                 <div class="style-card-title">飯店級輕奢</div>
                 <div class="style-card-desc">金屬細節與石材光影</div>
             </label>
 
             <label class="style-card" onclick="selectStyle(this)">
-                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=400&q=80" class="style-card-img" alt="尊爵訂製邸宅">
+                <img src="style-custom.jpg" class="style-card-img" alt="尊爵訂製邸宅">
                 <input type="radio" name="styleChoice" value="尊爵訂製邸宅">
                 <div class="style-card-title">尊爵訂製邸宅</div>
                 <div class="style-card-desc">頂級工藝與客製化奢華</div>
@@ -479,7 +480,6 @@
         }
 
         // 初始化 QR Code 生成
-        let qrCanvas = null;
         const qrcodeObj = new QRCode(document.getElementById("qrcodeHidden"), {
             text: lineOfficialUrl,
             width: 100,
@@ -581,7 +581,7 @@
 
             ctx.font = "18px 'Noto Serif TC', serif";
             ctx.fillStyle = "#242c27";
-            ctx.fillText(`稱　　呼：${name}`, 100, 255);
+            ctx.fillText(`稱  呼：${name}`, 100, 255);
             ctx.fillText(`聯絡電話：${phone}`, 100, 290);
             ctx.fillText(`建案/地址：${project}`, 100, 325);
             ctx.fillText(`方便聯絡：${time}`, 100, 360);
